@@ -1,0 +1,182 @@
+﻿@model EventVM
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tazkarti Admin Dashboard</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,typography,aspect-ratio,line-clamp,container-queries"></script>
+    <script>
+        const decrementButton = document.getElementById("decrement-ticket");
+        const incrementButton = document.getElementById("increment-ticket");
+        const ticketCountInput = document.getElementById("ticket-count");
+
+        let currentTicketCount = 0; // Store the current ticket count
+
+        decrementButton.addEventListener("click", () => {
+          if (currentTicketCount > 0) {
+            // Prevent decrementing below 0
+            currentTicketCount--;
+            ticketCountInput.textContent = currentTicketCount;
+          }
+        });
+
+        incrementButton.addEventListener("click", () => {
+          currentTicketCount++;
+          ticketCountInput.textContent = currentTicketCount;
+        });
+    </script>
+</head>
+<body>
+    <div class="flex min-h-screen">
+        <nav class="bg-gray-800 text-white w-64">
+            <div class="p-4 flex items-center justify-between">
+                <h1 class="text-2xl font-bold">Tazkarti</h1>
+                <img src="https://randomuser.me/api/portraits/men/75.jpg"
+                     alt="User Avatar"
+                     class="w-10 h-10 rounded-full" />
+            </div>
+            <ul class="mt-4 space-y-2">
+                <li>
+                    <a href="#"
+                       class="flex items-center p-3 rounded-md hover:bg-gray-700">
+                        <svg class="w-6 h-6 text-gray-300"
+                             fill="none"
+                             stroke="currentColor"
+                             viewBox="0 0 24 24"
+                             xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round"
+                                  stroke-linejoin="round"
+                                  stroke-width="2"
+                                  d="M9 13h6m-3-3V7m3 6V7"></path>
+                        </svg>
+                        <span class="ml-2">Events</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="#"
+                       class="flex items-center p-3 rounded-md hover:bg-gray-700">
+                        <svg class="w-6 h-6 text-gray-300"
+                             fill="none"
+                             stroke="currentColor"
+                             viewBox="0 0 24 24"
+                             xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round"
+                                  stroke-linejoin="round"
+                                  stroke-width="2"
+                                  d="M12 4.354a4.001 4.001 0 100 7.692V10a4 4 0 01-3.998-3.75V5.646z"></path>
+                        </svg>
+                        <span class="ml-2">Users</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+        <div class="flex-1 p-4">
+            <h2 class="text-xl font-bold">Dashboard</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
+                <div class="bg-white rounded-lg shadow-md p-4 cursor-pointer hover:shadow-lg">
+                    <h3 class="text-lg font-bold">Event Statistics</h3>
+                    <ul class="mt-4">
+                        <li>
+                            Total Events:should be replace with NUMBER OF EVENTS
+                            <span id="total-events"></span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="bg-white rounded-lg shadow-md p-4 cursor-pointer hover:shadow-lg">
+                    <h3 class="text-lg font-bold">User Statistics</h3>
+                    <ul class="mt-4">
+                        <li>Total Bookings: should be replaced with number of user</li>
+                    </ul>
+                </div>
+            </div>
+            <form id="event-form" asp-controller="Event" asp-action="Create" enctype="multipart/form-data"
+                  class="max-w-md mt-6 mx-auto p-6 bg-white rounded-lg shadow-md">
+                <h2 class="text-2xl font-bold text-center mb-4">Create New Event</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label for="event-name" class="block text-gray-700 font-bold mb-2">Event Name :</label>
+                        <input type="text"
+                            asp-for="Name"
+                               id="event-name"
+                               class="appearance-none block w-full bg-gray-200 border border-gray-200 rounded-lg px-3 py-2 placeholder-gray-400 focus:outline-none focus:bg-white focus:border-gray-300"
+                               required />
+                    </div>
+                    <div>
+                        <label for="event-place"
+                               class="block text-gray-700 font-bold mb-2">Event Place :</label>
+                        <input type="text"
+                            asp-for="place"
+                               id="event-place"
+                               class="appearance-none block w-full bg-gray-200 border border-gray-200 rounded-lg px-3 py-2 placeholder-gray-400 focus:outline-none focus:bg-white focus:border-gray-300"
+                               required />
+                    </div>
+                    <div>
+                        <label for="event-image"
+                               class="block text-gray-700 font-bold mb-2">Event Image URL :</label>
+                        <input type="file"
+                            asp-for="Image"
+                               id="event-image"
+                               class="appearance-none block w-full bg-gray-200 border border-gray-200 rounded-lg px-3 py-2 placeholder-gray-400 focus:outline-none focus:bg-white focus:border-gray-300"
+                               required />
+                    </div>
+                    <div>
+                        <label for="event-price"
+                               class="block text-gray-700 font-bold mb-2">Event Price</label>
+                        <input type="number"
+                            asp-for="Price"
+                               id="event-price"
+                               class="appearance-none block w-full bg-gray-200 border border-gray-200 rounded-lg px-3 py-2 placeholder-gray-400 focus:outline-none focus:bg-white focus:border-gray-300"
+                               required />
+                    </div>
+                    <div class="flex items-center">
+                        <label for="event-price"
+                               class="block text-gray-700 font-bold mb-2">Number of Ticket</label>
+                        <button id="decrement-ticket"
+                                class="bg-gray-200 hover:bg-gray-300 text-gray-600 px-2 py-1 rounded-md focus:outline-none">
+                            <svg class="w-4 h-4"
+                                 fill="none"
+                                 stroke="currentColor"
+                                 viewBox="0 0 24 24"
+                                 xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round"
+                                      stroke-linejoin="round"
+                                      stroke-width="2"
+                                      d="M18 12H6" />
+                            </svg>
+                        </button>
+                        <input type="number"
+                               id="ticket-count"
+                               asp-for="NoOfTickets"
+                               class="appearance-none block w-16 bg-gray-200 border border-gray-200 rounded-lg px-3 py-2 placeholder-gray-400 focus:outline-none focus:bg-white focus:border-gray-300"
+                               value="0"
+                               />
+                        <button id="increment-ticket"
+                                class="bg-gray-200 hover:bg-gray-300 text-gray-600 px-2 py-1 rounded-md focus:outline-none">
+                            <svg class="w-4 h-4"
+                                 fill="none"
+                                 stroke="currentColor"
+                                 viewBox="0 0 24 24"
+                                 xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round"
+                                      stroke-linejoin="round"
+                                      stroke-width="2"
+                                      d="M12 6v12l10-6z" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+                <div class="text-center mt-4">
+                    <button type="submit"
+                            class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">
+                        Create Event
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/axios@1.1.2/dist/axios.min.js"></script>
+</body>
+</html>
