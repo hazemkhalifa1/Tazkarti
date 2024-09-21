@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<EventVM>
 @{
     Layout = "~/Views/Shared/_DashboardLayout.cshtml";
-}
+          }
     <div class="p-4">
         <h2 class="text-xl font-bold mb-4">Manage Even</h2>
 
@@ -10,7 +10,7 @@
             <a href="/events/create"
                class="bg-green-500 text-white px-4 py-2 rounded">
                 Add Event
-            </a>
+                    </a>
         </div>
 
         <!-- Events Table -->
@@ -26,7 +26,6 @@
             <tbody>
                 @foreach (var item in Model)
                 {
-                <tr>
                     <td class="py-2 px-4">@item.Name</td>
                     <td class="py-2 px-4">@item.place</td>
                     <td class="py-2 px-4">@item.Time</td>
@@ -34,10 +33,14 @@
                         <a asp-action="Edit" asp-route-id="@item.Id" class="bg-blue-500 text-white px-2 py-1 rounded mr-2">Edit</a>
                         <form asp-action="/events/delete/1" method="POST">
                             <button type="submit" class="bg-red-500 text-white px-2 py-1 rounded">Delete</button>
-                        </form>
+            </form>
                     </td>
+            }
                 </tr>
-                }
             </tbody>
         </table>
     </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/axios@1.1.2/dist/axios.min.js"></script>
+</body>
+</html>

@@ -18,18 +18,18 @@
 
     <!-- Events Table -->
     <table class="min-w-full bg-white shadow-md rounded">
-        <thead>
-            <tr>
+    <thead>
+        <tr>
                 <th class="py-2 px-4 bg-gray-200">User Name</th>
                 <th class="py-2 px-4 bg-gray-200">Email</th>
                 <th class="py-2 px-4 bg-gray-200">Role</th>
                 <th class="py-2 px-4 bg-gray-200">Actions</th>
-            </tr>
-        </thead>
-        <tbody>
+        </tr>
+    </thead>
+    <tbody>
             @foreach (var item in Model)
             {
-                <tr>
+        <tr>
                     <td class="py-2 px-4">@item.UserName</td>
                     <td class="py-2 px-4">@item.Email</td>
                     <td class="py-2 px-4">@item.Role</td>
@@ -39,9 +39,9 @@
                         <form asp-action="Delete" asp-route-id="@item.Id" method="POST">
                             <button type="submit" class="bg-red-500 text-white px-2 py-1 rounded">Delete</button>
                         </form>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
 </div>
