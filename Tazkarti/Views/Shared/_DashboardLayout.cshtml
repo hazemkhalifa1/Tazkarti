@@ -1,0 +1,81 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"]</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,typography,aspect-ratio,line-clamp,container-queries"></script>
+</head>
+<body>
+    <div class="flex min-h-screen">
+        <nav class="bg-gray-800 text-white w-64">
+            <div class="p-4 flex items-center justify-between">
+                <h1 class="text-2xl font-bold">Tazkarti</h1>
+                <img src="https://randomuser.me/api/portraits/men/75.jpg"
+                     alt="User Avatar"
+                     class="w-10 h-10 rounded-full" />
+            </div>
+            <ul class="mt-4 space-y-2">
+                <!-- Events Section -->
+                <li>
+                    <a asp-controler="Event" asp-action="Index"
+                       class="flex items-center p-3 rounded-md hover:bg-gray-700">
+                        <svg class="w-6 h-6 text-gray-300"
+                             fill="none"
+                             stroke="currentColor"
+                             viewBox="0 0 24 24"
+                             xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round"
+                                  stroke-linejoin="round"
+                                  stroke-width="2"
+                                  d="M9 13h6m-3-3V7m3 6V7"></path>
+                        </svg>
+                        <span class="ml-2">Events</span>
+                    </a>
+                </li>
+
+                <!-- Users Section -->
+                <li>
+                    <a asp-controler="User" asp-actionz="Index"
+                       class="flex items-center p-3 rounded-md hover:bg-gray-700">
+                        <svg class="w-6 h-6 text-gray-300"
+                             fill="none"
+                             stroke="currentColor"
+                             viewBox="0 0 24 24"
+                             xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round"
+                                  stroke-linejoin="round"
+                                  stroke-width="2"
+                                  d="M12 4.354a4.001 4.001 0 100 7.692V10a4 4 0 01-3.998-3.75V5.646z"></path>
+                        </svg>
+                        <span class="ml-2">Users</span>
+                    </a>
+                </li>
+
+                <!-- Tickets Section -->
+                <li>
+                    <a asp-controler="Ticket" asp-action="Index"
+                       class="flex items-center p-3 rounded-md hover:bg-gray-700">
+                        <svg class="w-6 h-6 text-gray-300"
+                             fill="none"
+                             stroke="currentColor"
+                             viewBox="0 0 24 24"
+                             xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round"
+                                  stroke-linejoin="round"
+                                  stroke-width="2"
+                                  d="M12 8v4l3 2"></path>
+                        </svg>
+                        <span class="ml-2">Tickets</span>
+                    </a>
+                </li>
+            </ul>
+
+        </nav>
+        <div class="flex-1 p-4">
+            @RenderBody()
+        </div>
+
+        <script src="https://cdn.jsdelivr.net/npm/axios@1.1.2/dist/axios.min.js"></script>
+</body>
+</html>

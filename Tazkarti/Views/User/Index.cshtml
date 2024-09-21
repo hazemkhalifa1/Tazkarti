@@ -1,0 +1,47 @@
+﻿@model IEnumerable<Tazkarti.Models.UserVM>
+
+@{
+    ViewData["Title"] = "Users";
+    Layout = "~/Views/Shared/_DashboardLayout.cshtml";
+}
+
+<div class="p-4">
+    <h2 class="text-xl font-bold mb-4">Manage Users</h2>
+
+    <!-- Button to Add Event -->
+    <div class="mb-4">
+        <a href="/events/create"
+           class="bg-green-500 text-white px-4 py-2 rounded">
+            Add Event
+        </a>
+    </div>
+
+    <!-- Events Table -->
+    <table class="min-w-full bg-white shadow-md rounded">
+        <thead>
+            <tr>
+                <th class="py-2 px-4 bg-gray-200">User Name</th>
+                <th class="py-2 px-4 bg-gray-200">Email</th>
+                <th class="py-2 px-4 bg-gray-200">Role</th>
+                <th class="py-2 px-4 bg-gray-200">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td class="py-2 px-4">@item.UserName</td>
+                    <td class="py-2 px-4">@item.Email</td>
+                    <td class="py-2 px-4">@item.Role</td>
+                    <td class="py-2 px-4">@item.Phone</td>
+                    <td class="py-2 px-4 flex">
+                        <a asp-action="Edit" asp-route-id="@item.Id" class="bg-blue-500 text-white px-2 py-1 rounded mr-2">Edit</a>
+                        <form asp-action="Delete" asp-route-id="@item.Id" method="POST">
+                            <button type="submit" class="bg-red-500 text-white px-2 py-1 rounded">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

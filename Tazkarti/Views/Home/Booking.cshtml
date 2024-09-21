@@ -1,0 +1,108 @@
+﻿@model EventVM
+@{
+    ViewData["Title"] = "ShowEvent";
+}
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.tailwindcss.com?plugins=forms,typography,aspect-ratio,line-clamp,container-queries"></script>
+
+    <title>Tazkartii</title>
+    <style>
+        /* Add custom styles for specific elements */
+        .event-card {
+          box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .event-book-btn {
+          background-color: #6a64f1;
+          color: white;
+          padding: 10px 20px;
+          border: none;
+          border-radius: 5px;
+          font-weight: bold;
+          transition: all 0.2s ease-in-out;
+        }
+
+        .event-book-btn:hover {
+          background-color: #5850d2;
+        }
+    </style>
+    <script>
+        function calculateTotalPrice(guestCount, eventPrice) {
+          const totalPrice = guestCount * eventPrice;
+          return totalPrice;
+          updateTotalPriceDisplay(totalPrice);
+        }
+
+        function updateTotalPriceDisplay(totalPrice) {
+          const totalPriceElement = document.getElementById("totalPrice");
+          totalPriceElement.textContent = `Total Price: $${totalPrice}`;
+        }
+    </script>
+</head>
+
+<body>
+    <div class="container mx-auto px-4 py-8">
+
+        <div class="event-card flex justify-center items-center gap-5 mt-9 p-10 bg-white rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+            <a href="#">
+                <img class="rounded-t-lg"
+                     src="~/Files/Images/@Model.ImageName"
+                     alt="Event Image" />
+            </a>
+            <div class="p-5">
+                <a href="#">
+                    <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+                        @Model.Name
+                    </h5>
+                </a>
+                <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">
+                    @Model.place
+                </p>
+                <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">
+                    @Model.Time
+                </p>
+                <p class="mb-5 font-bold text-2xl text-gray-700 dark:text-gray-400">
+                    @Model.Price $
+                </p>
+                <a href="#" class="event-book-btn mt-5">Book Now</a>
+            </div>
+        </div>
+
+        <div class="flex items-center justify-center p-12">
+            <div class="mx-auto w-full max-w-[550px]">
+                <form  asp-action="Booking"
+                    
+                      onsubmit="e.preventDefault()"
+                      method="POST">
+                    <div class="mb-5">
+                        <label for="guest"
+                               class="mb-3 block text-base font-medium text-[#07074D]">How many guest are you bringing?</label>
+                        <input 
+                            type="number"
+                               name="numOfTicket"
+                               id="guest"
+                               placeholder="5"
+                               min="0"
+                               class="w-full appearance-none rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
+                               onchange="const guestCount = this.value; const eventPrice = @Model.Price;
+                        const totalPrice = guestCount * eventPrice;
+                        updateTotalPriceDisplay(totalPrice);" />
+                    </div>
+                    <div class="mb-5">
+                        <p id="totalPrice" class="font-bold text-lg">Total Price: $0</p>
+                    </div>
+
+                    <div>
+                        <button class="hover:shadow-form rounded-md bg-[#6A64F1] py-3 px-8 text-center text-base font-semibold text-white outline-none">
+                            Submit
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+    </div>
+</body>
