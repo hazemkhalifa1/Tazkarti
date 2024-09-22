@@ -28,6 +28,7 @@ namespace Tazkarti.Controllers
             return View(_mapper.Map<EventVM>(_eventRepository.GetbyId(id)));
         }
 
+        public ActionResult Create() => View(new EventVM());
 
         // POST: EventController/Create
         [HttpPost]

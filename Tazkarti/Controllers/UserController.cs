@@ -21,10 +21,8 @@ namespace Tazkarti.Controllers
 
         // GET: UserController
         public ActionResult Index()
-        {
-            List<UserVM> mappUsers = _mapper.Map<List<UserVM>>(_userManager.Users.ToList());
-            return View(mappUsers);
-        }
+        => View(_mapper.Map<List<UserVM>>(_userManager.Users.ToList()));
+
 
         public ActionResult Login()
         {
