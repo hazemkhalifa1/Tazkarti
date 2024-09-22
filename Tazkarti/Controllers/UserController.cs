@@ -83,17 +83,23 @@ namespace Tazkarti.Controllers
         // GET: UserController/Edit/5
         public ActionResult Edit(string id)
         {
-            UserVM mappUser = _mapper.Map<UserVM>(_userManager.FindByIdAsync(id));
-            return View();
+            UserVM mappUser = _mapper.Map<UserVM>(_userManager.FindByIdAsync(id).Result);
+            return View(mappUser);
         }
 
         // POST: UserController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public async Task<ActionResult> Edit(string id, UserVM userVM)
         {
             try
             {
+                AppUser user = await _userManager.FindByIdAsync(id);
+                user.Email = userVM.Email;
+                user.PhoneNumber = userVM.PhoneNumber;
+                user.UserName = userVM.UserName;
+                user.Role = userVM.Role;
+                await _userManager.UpdateAsync(user);
                 return RedirectToAction(nameof(Index));
             }
             catch

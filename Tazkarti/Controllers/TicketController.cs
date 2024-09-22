@@ -17,9 +17,10 @@ namespace Tazkarti.Controllers
         }
 
         // GET: TicketController
-        public ActionResult Index()
+        public ActionResult Index(int? SearchValue = null)
         {
-            return View(_mapper.Map<IEnumerable<TicketVM>>(_ticRepo.GetAll()));
+            var result = _mapper.Map<IEnumerable<TicketVM>>(_ticRepo.Search(SearchValue));
+            return View(result);
         }
 
         // GET: TicketController/Details/5

@@ -1,0 +1,53 @@
+﻿@model TicketVM
+@{
+    Layout = "~/Views/Shared/_DashboardLayout.cshtml";
+}
+<div class="max-w-md mt-6 mx-auto p-6 bg-white rounded-lg shadow-md">
+    <h2 class="text-2xl font-bold text-center mb-4">Details Ticket Of @Model.EventName Event</h2>
+
+    <!-- Event Name -->
+    <div>
+        <label for="event-name" class="block text-gray-700 font-bold mb-2">Ticket Id :</label>
+        <input type="number"
+               asp-for="Id"
+               id="event-name"
+               class="appearance-none block w-full bg-gray-200 border border-gray-200 rounded-lg px-3 py-2 placeholder-gray-400 focus:outline-none focus:bg-white focus:border-gray-300"
+               readonly />
+    </div>
+
+    <!-- Event Place -->
+    <div>
+        <label for="event-place" class="block text-gray-700 font-bold mb-2">Event Name :</label>
+        <input type="text"
+               asp-for="EventName"
+               id="event-place"
+               class="appearance-none block w-full bg-gray-200 border border-gray-200 rounded-lg px-3 py-2 placeholder-gray-400 focus:outline-none focus:bg-white focus:border-gray-300"
+               readonly />
+    </div>
+
+    <!-- Event Date -->
+    <div>
+        <label class="block text-gray-700 font-bold mb-2">Valid :</label>
+        <input type="checkbox"
+               asp-for="Valid"
+               class="appearance-none block w-full bg-gray-200 border border-gray-200 rounded-lg px-3 py-2 placeholder-gray-400 focus:outline-none focus:bg-white focus:border-gray-300"
+               disabled />
+    </div>
+
+    <div>
+        <label for="event-price" class="block text-gray-700 font-bold mb-2">User Id :</label>
+        <input type="text"
+               asp-for="UserId"
+               id="event-price"
+               class="appearance-none block w-full bg-gray-200 border border-gray-200 rounded-lg px-3 py-2 placeholder-gray-400 focus:outline-none focus:bg-white focus:border-gray-300"
+               readonly />
+    </div>
+
+    <!-- Submit Button -->
+    <a asp-action="Index" class="text-center mt-4">
+        <button type="submit"
+                class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">
+            Back
+        </button>
+    </a>
+</div>

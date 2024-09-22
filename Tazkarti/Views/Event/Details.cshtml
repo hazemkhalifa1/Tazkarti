@@ -19,9 +19,8 @@
         </ul>
     </div>
 </div>
-<form id="event-form" asp-controller="Event" asp-action="Edit" enctype="multipart/form-data"
-      class="max-w-md mt-6 mx-auto p-6 bg-white rounded-lg shadow-md">
-    <h2 class="text-2xl font-bold text-center mb-4">Edit @Model.Name Event</h2>
+<div class="max-w-md mt-6 mx-auto p-6 bg-white rounded-lg shadow-md">
+    <h2 class="text-2xl font-bold text-center mb-4">Details @Model.Name Event</h2>
 
     <!-- Event Name -->
     <div>
@@ -30,7 +29,7 @@
                asp-for="Name"
                id="event-name"
                class="appearance-none block w-full bg-gray-200 border border-gray-200 rounded-lg px-3 py-2 placeholder-gray-400 focus:outline-none focus:bg-white focus:border-gray-300"
-               required />
+               readonly />
     </div>
 
     <!-- Event Place -->
@@ -59,7 +58,8 @@
         <input type="file"
                asp-for="Image"
                id="event-image"
-               class="appearance-none block w-full bg-gray-200 border border-gray-200 rounded-lg px-3 py-2 placeholder-gray-400 focus:outline-none focus:bg-white focus:border-gray-300" />
+               class="appearance-none block w-full bg-gray-200 border border-gray-200 rounded-lg px-3 py-2 placeholder-gray-400 focus:outline-none focus:bg-white focus:border-gray-300"
+               required />
     </div>
 
     <!-- Event Info -->
@@ -93,10 +93,10 @@
     </div>
 
     <!-- Submit Button -->
-    <div class="text-center mt-4">
+    <a asp-action="Index" class="text-center mt-4">
         <button type="submit"
                 class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">
-            Edit Event
+            Back
         </button>
-    </div>
-</form>
+    </a>
+</div>

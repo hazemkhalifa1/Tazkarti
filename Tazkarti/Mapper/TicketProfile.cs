@@ -8,7 +8,8 @@ namespace Tazkarti.Mapper
     {
         public TicketProfile()
         {
-            CreateMap<Ticket, TicketVM>();
+            CreateMap<Ticket, TicketVM>()
+                .ForMember(t => t.EventName, o => o.MapFrom(t => t.Event.Name));
         }
     }
 }

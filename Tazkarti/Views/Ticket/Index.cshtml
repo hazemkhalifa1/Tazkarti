@@ -1,0 +1,50 @@
+﻿@model IEnumerable<TicketVM>
+@{
+    ViewData["Title"]="Ticket";
+    Layout = "~/Views/Shared/_DashboardLayout.cshtml";
+}
+<div class="p-4">
+    <h2 class="text-xl font-bold mb-4">Manage @ViewData["Title"]</h2>
+    <form class="my-5" asp-action="Index">
+        <div class="row">
+            <div class="col-sm-8">
+                <input placeholder="Search ..." name="SearchValue" class="form-control" />
+            </div>
+            <div class="col-sm-4">
+                <input type="submit" value="Search" class="btn btn-success btn-block" />
+            </div>
+        </div>
+    </form>
+
+    <!-- Events Table -->
+    <table class="min-w-full bg-white shadow-md rounded">
+        <thead>
+            <tr>
+                <th class="py-2 px-4 bg-gray-200">Id</th>
+                <th class="py-2 px-4 bg-gray-200">Event Name</th>
+                <th class="py-2 px-4 bg-gray-200">Valid</th>
+                <th class="py-2 px-4 bg-gray-200">User Id</th>
+                <th class="py-2 px-4 bg-gray-200">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td class="py-2 px-4">@item.Id</td>
+                    <td class="py-2 px-4">@item.EventName</td>
+                    <td class="py-2 px-4">@item.Valid</td>
+                    <td class="py-2 px-4">@item.UserId</td>
+                    <td class="py-2 px-4 flex">
+                        <a asp-action="Details" asp-route-id="@item.Id" class="bg-blue-400 text-white px-2 py-1 rounded mr-2">Edit</a>
+                        <form asp-action="/events/delete/1" method="POST">
+                            <button type="submit" class="bg-red-500 text-white px-2 py-1 rounded">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/axios@1.1.2/dist/axios.min.js"></script>

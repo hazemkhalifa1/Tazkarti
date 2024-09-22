@@ -23,9 +23,9 @@ namespace BLL.Repositories
             if (e != null)
             {
                 if (e.NoOfTickets < ev.NoOfTickets)
-                {
                     AddTik(ev, ev.NoOfTickets - e.NoOfTickets);
-                }
+                else
+                    _dbContext.Tickets.RemoveRange(_dbContext.Tickets.Where(t => t.Valid == true).TakeLast(e.NoOfTickets - ev.NoOfTickets));
                 _dbContext.Events.Update(ev);
             }
         }

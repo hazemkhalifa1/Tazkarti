@@ -8,7 +8,7 @@
 
     <!-- Button to Add Event -->
     <div class="mb-4">
-        <a asp-action="Create"
+        <a asp-action="Registartion"
            class="bg-blue-500 text-white px-4 py-2 rounded">
             Add @ViewData["Title"]
         </a>
@@ -32,7 +32,7 @@
                     <td class="py-2 px-4">@item.UserName</td>
                     <td class="py-2 px-4">@item.Email</td>
                     <td class="py-2 px-4">@item.Role</td>
-                    <td class="py-2 px-4">@item.Phone</td>
+                    <td class="py-2 px-4">@item.PhoneNumber</td>
                     <td class="py-2 px-4 flex">
                         <a asp-action="Edit" asp-route-id="@item.Id" class="bg-blue-500 text-white px-2 py-1 rounded mr-2">Edit</a>
                         <form asp-action="Delete" asp-route-id="@item.Id" method="POST">

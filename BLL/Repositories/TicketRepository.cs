@@ -2,6 +2,7 @@
 using DAL.Context;
 using DAL.Entities;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace BLL.Repositories
 {
@@ -12,6 +13,8 @@ namespace BLL.Repositories
         {
             _userManager = userManager;
         }
+
+        public Ticket GetbyId(int id) => _dbContext.Tickets.Where(t => t.Id == id).Include(t => t.Event).FirstOrDefault();
 
         public void Book(int EventId, string UserId, int NoumOfTic)
         {
@@ -30,6 +33,14 @@ namespace BLL.Repositories
                 _dbContext.Tickets.UpdateRange(tic);
                 _dbContext.SaveChanges();
             }
+        }
+
+        public IEnumerable<Ticket> Search(int? SearchValue)
+        {
+            if (SearchValue != null)
+                return _dbContext.Tickets.Where(t => t.Id == SearchValue).Include(t => t.Event);
+            else
+                return _dbContext.Tickets.Select(t => t).Include(t => t.Event);
         }
     }
 }

@@ -4,6 +4,7 @@
     {
         public int Id { get; set; }
         public string EventName { get; set; }
+        public bool Valid { get; set; }
         public string UserId { get; set; }
     }
 }
