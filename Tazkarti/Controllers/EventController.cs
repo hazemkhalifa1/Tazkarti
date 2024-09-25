@@ -1,12 +1,14 @@
 ﻿using AutoMapper;
 using BLL.Repositories;
 using DAL.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Tazkarti.Models;
 using Tazkarti.Utitly;
 
 namespace Tazkarti.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class EventController : Controller
     {
         private readonly EventRepository _eventRepository;

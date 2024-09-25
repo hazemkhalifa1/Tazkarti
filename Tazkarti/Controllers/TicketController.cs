@@ -1,10 +1,12 @@
 ﻿using AutoMapper;
 using BLL.Repositories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Tazkarti.Models;
 
 namespace Tazkarti.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class TicketController : Controller
     {
         private readonly TicketRepository _ticRepo;

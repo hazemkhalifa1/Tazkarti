@@ -1,6 +1,7 @@
 using AutoMapper;
 using BLL.Repositories;
 using DAL.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
@@ -9,7 +10,7 @@ using Tazkarti.Models;
 
 namespace Tazkarti.Controllers
 {
-
+    [Authorize]
     public class HomeController : Controller
     {
         private readonly EventRepository _eventRepo;
@@ -30,16 +31,19 @@ namespace Tazkarti.Controllers
 
         public IActionResult Index()
         {
+            ViewBag.User = User.IsInRole("Admin");
             return View(_mapper.Map<IEnumerable<EventVM>>(_eventRepo.GetAll()));
         }
 
         public IActionResult Booking(int id)
         {
+            ViewBag.User = User.IsInRole("Admin");
             return View(_mapper.Map<EventVM>(_eventRepo.GetbyId(id)));
         }
         [HttpPost]
         public IActionResult Booking(int id, int numOfTicket)
         {
+            ViewBag.User = User.IsInRole("Admin");
             string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             _ticketRepo.Book(id, userId, numOfTicket);
             return RedirectToAction(nameof(Index));
