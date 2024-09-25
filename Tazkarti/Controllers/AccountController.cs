@@ -27,10 +27,10 @@ namespace Tazkarti.Controllers
         {
             if (!ModelState.IsValid)
                 return View(userVM);
-            var user = _userManager.FindByEmailAsync(userVM.Email).Result;
+            var user = await _userManager.FindByEmailAsync(userVM.Email);
             if (user != null)
             {
-                if (_userManager.CheckPasswordAsync(user, userVM.Pass).Result)
+                if (await _userManager.CheckPasswordAsync(user, userVM.Pass))
                 {
                     var result = await _signInManager.PasswordSignInAsync(user, userVM.Pass, userVM.RememberMe, false);
                     if (result.Succeeded) return RedirectToAction("Index", "Home");
@@ -68,10 +68,10 @@ namespace Tazkarti.Controllers
                 UserName = model.UserName,
                 PhoneNumber = model.PhoneNumber
             };
-            var result = _userManager.CreateAsync(user, model.Password).Result;
+            var result = await _userManager.CreateAsync(user, model.Password);
             if (result.Succeeded)
             {
-                var resul = _userManager.AddToRoleAsync(user, "User");
+                var resul = await _userManager.AddToRoleAsync(user, "User");
                 return Redirect(nameof(Login));
             }
             else

@@ -4,6 +4,7 @@ namespace BLL.Interfaces
 {
     public interface IEventRepository : IGenaricRepository<Event>
     {
-        public void Add(Event e);
+        public Task UpdateAsync(Event ev);
+        public Task AddTikAsync(Event e, int num);
     }
 }

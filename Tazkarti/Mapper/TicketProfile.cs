@@ -9,7 +9,8 @@ namespace Tazkarti.Mapper
         public TicketProfile()
         {
             CreateMap<Ticket, TicketVM>()
-                .ForMember(t => t.EventName, o => o.MapFrom(t => t.Event.Name));
+                .ForMember(t => t.EventName, o => o.MapFrom(t => t.Event.Name))
+                .ForMember(t => t.UserName, o => o.MapFrom(t => t.user.UserName));
         }
     }
 }

@@ -1,3 +1,4 @@
+using BLL.Interfaces;
 using BLL.Repositories;
 using DAL.Context;
 using DAL.Entities;
@@ -20,6 +21,7 @@ namespace Tazkarti
                 ));
             builder.Services.AddTransient<EventRepository>();
             builder.Services.AddTransient<TicketRepository>();
+            builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
             builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
             builder.Services.AddIdentity<AppUser, IdentityRole>(options =>
             {

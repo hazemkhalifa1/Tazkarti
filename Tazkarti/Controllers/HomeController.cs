@@ -1,4 +1,5 @@
 using AutoMapper;
+using BLL.Interfaces;
 using BLL.Repositories;
 using DAL.Entities;
 using Microsoft.AspNetCore.Authorization;
@@ -13,39 +14,38 @@ namespace Tazkarti.Controllers
     [Authorize]
     public class HomeController : Controller
     {
-        private readonly EventRepository _eventRepo;
-        private readonly TicketRepository _ticketRepo;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly ILogger<HomeController> _logger;
         private readonly IMapper _mapper;
         private readonly UserManager<AppUser> _userManager;
 
-        public HomeController(EventRepository eventRepository, ILogger<HomeController> logger, IMapper mapper, UserManager<AppUser> userManager, TicketRepository ticketRepo)
+        public HomeController(IUnitOfWork unitOfWork, ILogger<HomeController> logger, IMapper mapper, UserManager<AppUser> userManager, TicketRepository ticketRepo)
         {
-            _eventRepo = eventRepository;
+            _unitOfWork = unitOfWork;
             _logger = logger;
             _mapper = mapper;
             _userManager = userManager;
-            _ticketRepo = ticketRepo;
         }
 
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
             ViewBag.User = User.IsInRole("Admin");
-            return View(_mapper.Map<IEnumerable<EventVM>>(_eventRepo.GetAll()));
+            return View(_mapper.Map<IEnumerable<EventVM>>(await _unitOfWork.EventRepository.GetAllAsync()));
         }
 
-        public IActionResult Booking(int id)
+        public async Task<IActionResult> Booking(int id)
         {
             ViewBag.User = User.IsInRole("Admin");
-            return View(_mapper.Map<EventVM>(_eventRepo.GetbyId(id)));
+            return View(_mapper.Map<EventVM>(await _unitOfWork.EventRepository.GetbyIdAsync(id)));
         }
         [HttpPost]
-        public IActionResult Booking(int id, int numOfTicket)
+        public async Task<IActionResult> Booking(int id, int numOfTicket)
         {
             ViewBag.User = User.IsInRole("Admin");
             string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            _ticketRepo.Book(id, userId, numOfTicket);
+            await _unitOfWork.TicketRepository.BookAsync(id, userId, numOfTicket);
+            await _unitOfWork.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 

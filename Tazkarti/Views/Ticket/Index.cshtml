@@ -1,6 +1,5 @@
 ﻿@model IEnumerable<TicketVM>
 @{
-    ViewData["Title"]="Ticket";
     Layout = "~/Views/Shared/_DashboardLayout.cshtml";
 }
 <div class="p-4">
@@ -24,6 +23,7 @@
                 <th class="py-2 px-4 bg-gray-200">Event Name</th>
                 <th class="py-2 px-4 bg-gray-200">Valid</th>
                 <th class="py-2 px-4 bg-gray-200">User Id</th>
+                <th class="py-2 px-4 bg-gray-200">User Name</th>
                 <th class="py-2 px-4 bg-gray-200">Actions</th>
             </tr>
         </thead>
@@ -35,9 +35,10 @@
                     <td class="py-2 px-4">@item.EventName</td>
                     <td class="py-2 px-4">@item.Valid</td>
                     <td class="py-2 px-4">@item.UserId</td>
+                    <td class="py-2 px-4">@item.UserName</td>
                     <td class="py-2 px-4 flex">
                         <a asp-action="Details" asp-route-id="@item.Id" class="bg-blue-400 text-white px-2 py-1 rounded mr-2">Edit</a>
-                        <form asp-action="/events/delete/1" method="POST">
+                        <form asp-action="Delete" asp-route-id="@item.Id" method="POST">
                             <button type="submit" class="bg-red-500 text-white px-2 py-1 rounded">Delete</button>
                         </form>
                     </td>

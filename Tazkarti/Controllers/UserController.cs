@@ -44,9 +44,9 @@ namespace Tazkarti.Controllers
 
         // GET: UserController/Edit/5
         [Authorize(Roles = "Admin")]
-        public ActionResult Edit(string id)
+        public async Task<ActionResult> Edit(string id)
         {
-            UserVM mappUser = _mapper.Map<UserVM>(_userManager.FindByIdAsync(id).Result);
+            UserVM mappUser = _mapper.Map<UserVM>(await _userManager.FindByIdAsync(id));
             return View(mappUser);
         }
 

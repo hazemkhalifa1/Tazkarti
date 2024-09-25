@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using BLL.Repositories;
+using BLL.Interfaces;
 using DAL.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -11,23 +11,23 @@ namespace Tazkarti.Controllers
     [Authorize(Roles = "Admin")]
     public class EventController : Controller
     {
-        private readonly EventRepository _eventRepository;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
 
-        public EventController(EventRepository eventRepository, IMapper mapper)
+        public EventController(IUnitOfWork unitOfWork, IMapper mapper)
         {
-            _eventRepository = eventRepository;
+            _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
 
         // GET: EventController
-        public ActionResult Index()
-            => View(_mapper.Map<IEnumerable<EventVM>>(_eventRepository.GetAll()));
+        public async Task<ActionResult> Index()
+            => View(_mapper.Map<IEnumerable<EventVM>>(await _unitOfWork.EventRepository.GetAllAsync()));
 
         // GET: EventController/Details/5
-        public ActionResult Details(int id)
+        public async Task<ActionResult> Details(int id)
         {
-            return View(_mapper.Map<EventVM>(_eventRepository.GetbyId(id)));
+            return View(_mapper.Map<EventVM>(await _unitOfWork.EventRepository.GetbyIdAsync(id)));
         }
 
         public ActionResult Create() => View(new EventVM());
@@ -35,14 +35,16 @@ namespace Tazkarti.Controllers
         // POST: EventController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(EventVM eventVM)
+        public async Task<ActionResult> Create(EventVM eventVM)
         {
             try
             {
                 if (eventVM.Image is not null)
                     eventVM.ImageName = DocumentSetting.UploadFile(eventVM.Image, "Images");
                 Event e = _mapper.Map<Event>(eventVM);
-                _eventRepository.Add(e);
+                e.NoOfAvailableTickets = e.NoOfTickets;
+                await _unitOfWork.EventRepository.AddAsync(e);
+                await _unitOfWork.SaveChangesAsync();
                 return RedirectToAction(nameof(Index), "Home");
             }
             catch (Exception ex)
@@ -53,15 +55,15 @@ namespace Tazkarti.Controllers
         }
 
         // GET: EventController/Edit/5
-        public ActionResult Edit(int id)
+        public async Task<ActionResult> Edit(int id)
         {
-            return View(_mapper.Map<EventVM>(_eventRepository.GetbyId(id)));
+            return View(_mapper.Map<EventVM>(await _unitOfWork.EventRepository.GetbyIdAsync(id)));
         }
 
         // POST: EventController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, EventVM eventVM)
+        public async Task<ActionResult> Edit(int id, EventVM eventVM)
         {
             if (id != eventVM.Id)
                 return BadRequest();
@@ -76,7 +78,8 @@ namespace Tazkarti.Controllers
                         eventVM.ImageName = DocumentSetting.UploadFile(eventVM.Image, "Images");
                     }
 
-                    _eventRepository.Update(_mapper.Map<Event>(eventVM));
+                    await _unitOfWork.EventRepository.UpdateAsync(_mapper.Map<Event>(eventVM));
+                    await _unitOfWork.SaveChangesAsync();
                     return RedirectToAction(nameof(Index));
 
                 }
@@ -89,23 +92,24 @@ namespace Tazkarti.Controllers
         }
 
         // GET: EventController/Delete/5
-        public ActionResult Delete(int id)
+        public async Task<ActionResult> Delete(int id)
         {
-            return View(_mapper.Map<EventVM>(_eventRepository.GetbyId(id)));
+            return View(_mapper.Map<EventVM>(await _unitOfWork.EventRepository.GetbyIdAsync(id)));
         }
 
         // POST: EventController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, EventVM eventVM)
+        public async Task<ActionResult> Delete(int id, EventVM eventVM)
         {
             if (id != eventVM.Id)
                 return BadRequest();
             try
             {
-                _eventRepository.Delete(_mapper.Map<Event>(eventVM));
+                _unitOfWork.EventRepository.Delete(_mapper.Map<Event>(eventVM));
                 if (eventVM.ImageName is not null)
                     DocumentSetting.DeleteFile(eventVM.ImageName, "Images");
+                await _unitOfWork.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
             catch (Exception ex)
