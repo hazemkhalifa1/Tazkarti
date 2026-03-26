@@ -8,35 +8,35 @@
     <!-- Button to Add User -->
     <div class="mb-4">
         <a asp-action="Registartion"
-           class="bg-blue-500 text-white px-4 py-2 rounded">
+               class="bg-blue-500 text-white px-4 py-2 rounded">
             @Localizer["SignUp"]
         </a>
     </div>
 
     <!-- Users Table -->
-    <table class="min-w-full bg-white shadow-md rounded">
-        <thead>
+    <table class="min-w-full bg-white shadow-md rounded overflow-hidden">
+        <thead class="bg-gray-100 dark:bg-gray-800">
             <tr>
-                <th class="py-2 px-4 bg-gray-200">@Localizer["User Name"]</th>
-                <th class="py-2 px-4 bg-gray-200">@Localizer["Email"]</th>
-                <th class="py-2 px-4 bg-gray-200">@Localizer["Role"]</th>
-                <th class="py-2 px-4 bg-gray-200">@Localizer["PhoneNum"]</th>
-                <th class="py-2 px-4 bg-gray-200">@Localizer["Action"]</th>
+                <th class="py-3 px-4 font-bold">@Localizer["User Name"]</th>
+                <th class="py-3 px-4 font-bold">@Localizer["Email"]</th>
+                <th class="py-3 px-4 font-bold">@Localizer["Role"]</th>
+                <th class="py-3 px-4 font-bold">@Localizer["PhoneNum"]</th>
+                <th class="py-3 px-4 font-bold">@Localizer["Action"]</th>
             </tr>
         </thead>
         <tbody>
             @foreach (var item in Model)
             {
                 <tr>
-                    <td class="py-2 px-4">@item.UserName</td>
-                    <td class="py-2 px-4">@item.Email</td>
-                    <td class="py-2 px-4">@item.Role</td>
-                    <td class="py-2 px-4">@item.PhoneNumber</td>
-                    <td class="py-2 px-4 flex gap-2">
-                        <a asp-action="Edit" asp-route-id="@item.Id" class="bg-blue-500 text-white px-2 py-1 rounded">@Localizer["Edit"]</a>
-                        <form asp-action="Delete" asp-route-id="@item.Id" method="POST">
-                            <button type="submit" class="bg-red-500 text-white px-2 py-1 rounded">@Localizer["Delete"]</button>
-                        </form>
+                    <td class="py-3 px-4 text-center text-sm text-gray-600">@item.UserName</td>
+                    <td class="py-3 px-4 text-center text-sm text-gray-600">@item.Email</td>
+                    <td class="py-3 px-4 text-center text-sm text-gray-600">@item.Role</td>
+                    <td class="py-3 px-4 text-center text-sm text-gray-600">@item.PhoneNumber</td>
+                    <td class="py-3 center px-4 flex gap-2 justify-center items-center">
+                            <a asp-action="Edit" asp-route-id="@item.Id" class="bg-blue-500 text-white px-2 py-1 rounded">@Localizer["Edit"]</a>
+                            <form asp-action="Delete" asp-route-id="@item.Id" method="POST">
+                                <button type="submit" class="bg-red-500 text-white px-2 py-1 rounded">@Localizer["Delete"]</button>
+                            </form>
                     </td>
                 </tr>
             }
