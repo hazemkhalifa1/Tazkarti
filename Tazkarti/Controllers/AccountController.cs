@@ -64,7 +64,6 @@ namespace Tazkarti.Controllers
             var user = new AppUser
             {
                 Email = model.Email,
-                Agree = model.Agree,
                 UserName = model.UserName,
                 PhoneNumber = model.PhoneNumber
             };

@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using DAL.Entities;
 using Tazkarti.Models;
 
@@ -10,7 +10,7 @@ namespace Tazkarti.Mapper
         {
             CreateMap<Ticket, TicketVM>()
                 .ForMember(t => t.EventName, o => o.MapFrom(t => t.Event.Name))
-                .ForMember(t => t.UserName, o => o.MapFrom(t => t.user.UserName));
+                .ForMember(t => t.EventNameAr, o => o.MapFrom(t => t.Event.NameAr));
         }
     }
 }

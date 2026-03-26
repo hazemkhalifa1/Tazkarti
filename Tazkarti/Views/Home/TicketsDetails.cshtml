@@ -1,0 +1,58 @@
+@model TicketDetailsViewModel
+@{
+    ViewData["Title"] = "Ticket Details";
+}
+
+<div class="container mx-auto px-4 sm:px-6 lg:px-8 mt-12 mb-24 animated fadeIn">
+    <div class="max-w-4xl mx-auto">
+        <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-6">@Localizer["Enter Attendee Information"]</h2>
+        <p class="text-gray-600 dark:text-gray-400 mb-8">
+            @Localizer["Please provide details for each ticket"] (@Model.NumberOfTickets @Localizer["tickets"]).
+        </p>
+
+        <form asp-action="Booking" method="post">
+            <div asp-validation-summary="All" class="text-red-500 mb-4"></div>
+            <input type="hidden" asp-for="EventId" />
+            <input type="hidden" asp-for="NumberOfTickets" />
+
+            @for (int i = 0; i < Model.NumberOfTickets; i++)
+            {
+                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6 mb-6 border border-gray-200 dark:border-gray-700 transition-colors">
+                    <h3 class="text-xl font-semibold text-gray-800 dark:text-white mb-4">@Localizer["Ticket"] #@(i + 1)</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">@Localizer["Name"]</label>
+                            <input asp-for="Tickets[i].Name" class="w-full px-4 py-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white focus:ring-blue-500 focus:border-blue-500 transition-colors" />
+                            <span asp-validation-for="Tickets[i].Name" class="text-red-500 text-sm"></span>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">@Localizer["Email Address"]</label>
+                            <input asp-for="Tickets[i].Email" class="w-full px-4 py-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white focus:ring-blue-500 focus:border-blue-500 transition-colors" />
+                            <span asp-validation-for="Tickets[i].Email" class="text-red-500 text-sm"></span>
+                        </div>
+                        <div class="md:col-span-2">
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">@Localizer["PhoneNum"]</label>
+                            <input asp-for="Tickets[i].PhoneNumber" class="w-full px-4 py-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white focus:ring-blue-500 focus:border-blue-500 transition-colors" />
+                            <span asp-validation-for="Tickets[i].PhoneNumber" class="text-red-500 text-sm"></span>
+                        </div>
+                    </div>
+                </div>
+            }
+
+            <div class="flex justify-between items-center mt-8">
+                <a asp-action="Details" asp-route-id="@Model.EventId" class="px-6 py-3 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition">
+                    @Localizer["Back to Events"]
+                </a>
+                <button type="submit" class="px-8 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition shadow-md">
+                    @Localizer["Continue to Checkout"]
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

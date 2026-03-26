@@ -6,6 +6,7 @@ using Tazkarti.Models;
 
 namespace Tazkarti.Controllers
 {
+    [Route("Dashboard/[controller]/[action]")]
     [Authorize(Roles = "Admin")]
     public class TicketController : Controller
     {
@@ -19,25 +20,27 @@ namespace Tazkarti.Controllers
         }
 
         // GET: TicketController
-        public ActionResult Index(int? SearchValue = null)
+        public async Task<ActionResult> Index(string? SearchValue = null)
         {
-            var result = _mapper.Map<IEnumerable<TicketVM>>(_unitOfWork.TicketRepository.Search(SearchValue));
-            return View(result);
+            var tickets = await _unitOfWork.TicketRepository.Search(SearchValue);
+            var result = _mapper.Map<IEnumerable<TicketVM>>(tickets);
+            return View("~/Views/Dashboard/Ticket/Index.cshtml", result);
         }
 
         // GET: TicketController/Details/5
-        public async Task<ActionResult> Details(int id)
+        public async Task<ActionResult> Details(Guid id)
         {
-            return View(_mapper.Map<TicketVM>(await _unitOfWork.TicketRepository.GetbyIdAsync(id)));
+            return View("~/Views/Dashboard/Ticket/Detalis.cshtml",
+                _mapper.Map<TicketVM>(await _unitOfWork.TicketRepository.GetbyIdAsync(id)));
         }
 
         // GET: TicketController/Edit/5
-        public async Task<ActionResult> Edit(int id) => View(_mapper.Map<TicketVM>(await _unitOfWork.TicketRepository.GetbyIdAsync(id)));
+        public async Task<ActionResult> Edit(Guid id) => View("~/Views/Dashboard/Ticket/Edit.cshtml", _mapper.Map<TicketVM>(await _unitOfWork.TicketRepository.GetbyIdAsync(id)));
 
         // POST: TicketController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, TicketVM ticketVM)
+        public ActionResult Edit(Guid id, TicketVM ticketVM)
         {
             try
             {
@@ -45,28 +48,29 @@ namespace Tazkarti.Controllers
             }
             catch
             {
-                return View();
+                return View("~/Views/Dashboard/Ticket/Edit.cshtml");
             }
         }
 
         // GET: TicketController/Delete/5
-        public async Task<ActionResult> Delete(int id) => View(_mapper.Map<TicketVM>(await _unitOfWork.TicketRepository.GetbyIdAsync(id)));
+        public async Task<ActionResult> Delete(Guid id) => View("~/Views/Dashboard/Ticket/Delete.cshtml", _mapper.Map<TicketVM>(await _unitOfWork.TicketRepository.GetbyIdAsync(id)));
 
         // POST: TicketController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, TicketVM ticketVM)
+        public async Task<ActionResult> Delete(Guid id, TicketVM ticketVM)
         {
             try
             {
-                _unitOfWork.TicketRepository.Delete(id);
+                var tic = await _unitOfWork.TicketRepository.GetbyIdAsync(id);
+                _unitOfWork.TicketRepository.Delete(tic);
                 _unitOfWork.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
             catch (Exception ex)
             {
                 ModelState.AddModelError("", ex.Message);
-                return View(nameof(Index), ticketVM);
+                return View("~/Views/Dashboard/Ticket/Delete.cshtml", ticketVM);
             }
         }
     }

@@ -1,0 +1,61 @@
+@model UserVM
+@{
+    Layout = "~/Views/Shared/_DashboardLayout.cshtml";
+}
+<form id="user-form" asp-action="Edit" enctype="multipart/form-data"
+      class="max-w-md mt-6 mx-auto p-6 bg-white rounded-lg shadow-md">
+    <h2 class="text-2xl font-bold text-center mb-4">@Localizer["Edit"] @Model.UserName</h2>
+
+    <div class="space-y-4">
+        <!-- User Name -->
+        <div>
+            <label for="user-name" class="block text-gray-700 font-bold mb-2">@Localizer["User Name"] :</label>
+            <input type="text"
+                   asp-for="UserName"
+                   id="user-name"
+                   class="appearance-none block w-full bg-gray-200 border border-gray-200 rounded-lg px-3 py-2 placeholder-gray-400 focus:outline-none focus:bg-white focus:border-gray-300"
+                   required />
+        </div>
+
+        <!-- User Email -->
+        <div>
+            <label for="user-email" class="block text-gray-700 font-bold mb-2">@Localizer["Email"] :</label>
+            <input type="email"
+                   asp-for="Email"
+                   id="user-Email"
+                   class="appearance-none block w-full bg-gray-200 border border-gray-200 rounded-lg px-3 py-2 placeholder-gray-400 focus:outline-none focus:bg-white focus:border-gray-300"
+                   required />
+        </div>
+
+        <!-- User Phone -->
+        <div>
+            <label for="user-phone" class="block text-gray-700 font-bold mb-2">@Localizer["PhoneNum"] :</label>
+            <input type="tel"
+                   asp-for="PhoneNumber"
+                   id="user-phone"
+                   class="appearance-none block w-full bg-gray-200 border border-gray-200 rounded-lg px-3 py-2 placeholder-gray-400 focus:outline-none focus:bg-white focus:border-gray-300"
+                   required />
+        </div>
+
+        <!-- User Role -->
+        <div>
+            <label for="Role" class="block text-gray-700 font-bold mb-2">@Localizer["Role"] :</label>
+            <select asp-for="Role" id="user-role" class="appearance-none block w-full bg-gray-200 border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:bg-white focus:border-gray-300" required>
+                <option value="">-- @Localizer["Select Role"] --</option>
+                <option value="Admin">Admin</option>
+                <option value="User">User</option>
+            </select>
+        </div>
+
+        <!-- Submit Button -->
+        <div class="text-center mt-6 flex gap-2 justify-center">
+            <button type="submit"
+                    class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-8 rounded-lg transition-colors">
+                @Localizer["Edit"]
+            </button>
+            <a asp-action="Index" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-8 rounded-lg transition-colors">
+                @Localizer["Back to List"]
+            </a>
+        </div>
+    </div>
+</form>

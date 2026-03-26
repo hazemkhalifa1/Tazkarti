@@ -1,8 +1,10 @@
-﻿namespace BLL.Interfaces
+﻿using DAL.Entities;
+
+namespace BLL.Interfaces
 {
     public interface IUnitOfWork
     {
-        public IEventRepository EventRepository { get; set; }
+        public IGenaricRepository<Event> EventRepository { get; set; }
         public ITicketRepository TicketRepository { get; set; }
         public Task SaveChangesAsync();
     }

@@ -1,79 +1,110 @@
-﻿@model IEnumerable<EventVM>
+@model IEnumerable<EventVM>
 @{
     ViewData["Title"] = "Home Page";
+    var isArabic = System.Globalization.CultureInfo.CurrentUICulture.Name.StartsWith("ar");
 }
-<div class="container mx-auto mt-12 animated fadeIn" id="our-events">
-    <div class="grid grid-cols-3 gap-5">
-        @foreach (var item in Model)
-        {
-            <div class="card">
-                <img src="~/Files/Images/@item.ImageName" alt="">
-                <h2>@item.Name</h2>
-                <p>@item.place</p>
-                <div class="btn">
-
-                    <button>BOOK NOW</button><span>count :@item.NoOfAvailableTickets</span>
-                </div>
-            </div>
-        }
-    </div>
-</div>
-
-<div id="about" class="mt-12 p-10 bg-gray-100 rounded-lg shadow-md">
-    <h1 class="text-3xl text-center font-bold text-blue-800">Tazkartii</h1>
-    <p class="text-center mt-5 text-2xl text-gray-700">
-        "We're passionate about making it easy for you to experience the events
-        you love. Our platform offers a seamless way to discover and book
-        tickets for a variety of events, from concerts and sports matches to
-        theater performances and festivals. With our user-friendly interface and
-        extensive event listings, you can find the perfect tickets to fit your
-        interests and schedule."
-    </p>
-</div>
-
-<div class="contact" id="contact">
-    <section class="bg-white dark:bg-gray-900">
-        <div class="py-8 lg:py-16 px-4 mx-auto max-w-screen-md">
-            <h2 class="mb-4 text-4xl font-extrabold text-center text-blue-700 dark:text-white">
-                Contact Us
-            </h2>
-            <p class="mb-8 lg:mb-16 font-light text-center text-gray-500 dark:text-gray-400 sm:text-xl">
-                Got a technical issue? Want to send feedback about a beta feature?
-                Need details about our Business plan? Let us know.
-            </p>
-            <form action="#" class="space-y-8">
-                <div>
-                    <label for="email"
-                           class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Your email</label>
-                    <input type="email"
-                           id="email"
-                           class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500 dark:shadow-sm-light"
-                           placeholder="name@flowbite.com"
-                           required />
-                </div>
-                <div>
-                    <label for="subject"
-                           class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Subject</label>
-                    <input type="text"
-                           id="subject"
-                           class="block p-3 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 shadow-sm focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500 dark:shadow-sm-light"
-                           placeholder="Let us know how we can help you"
-                           required />
-                </div>
-                <div class="sm:col-span-2">
-                    <label for="message"
-                           class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-400">Your message</label>
-                    <textarea id="message"
-                              rows="6"
-                              class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg shadow-sm border border-gray-300 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                              placeholder="Leave a comment..."></textarea>
-                </div>
-                <button href="#"
-                        type="submit"
-                        class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-                    send message
-                </button>
-            </form>
+<div class="container mx-auto px-4 sm:px-6 lg:px-8 mt-16 mb-24 animated fadeIn">
+    <!-- Events Section -->
+    <div id="our-events" class="mb-24">
+        <div class="text-center mb-12">
+            <h1 class="text-4xl md:text-5xl font-extrabold text-blue-900 dark:text-blue-500 mb-4 tracking-tight">@Localizer["Featured Events"]</h1>
+            <p class="text-lg text-gray-500 dark:text-gray-400 max-w-2xl mx-auto">@Localizer["Discover"]</p>
         </div>
-    </section>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            @foreach (var item in Model)
+            {
+                <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden flex flex-col border border-gray-100 dark:border-gray-700 group">
+                    <div class="relative h-56 w-full overflow-hidden">
+                        <img src="~/Files/Images/@item.ImageName" alt="@(isArabic?item.NameAr:item.Name)" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-in-out">
+                        <div class="absolute top-4 right-4 bg-white/95 backdrop-blur-sm px-4 py-1.5 rounded-full text-sm font-bold text-blue-700 shadow-sm flex items-center gap-1.5">
+                            <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+                                 @item.NoOfTickets @Localizer["left"]
+                        </div>
+                    </div>
+                    <div class="p-6 flex flex-col flex-grow">
+                            <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-3 line-clamp-1 group-hover:text-blue-700 transition-colors">@(isArabic?item.NameAr:item.Name)</h2>
+                        
+                        <div class="space-y-2.5 mb-6">
+                            <div class="flex items-center text-gray-600 dark:text-gray-400">
+                                <svg class="w-5 h-5 mr-3 text-blue-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                                    <span class="font-medium">@(isArabic? item.placeAr :item.place)</span>
+                            </div>
+                            <div class="flex items-center text-gray-600 dark:text-gray-400">
+                                <svg class="w-5 h-5 mr-3 text-blue-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                <span class="font-medium">@item.Time</span>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-auto pt-5 border-t border-gray-100 dark:border-gray-700">
+                                <form asp-action="EventDetails" method="get" class="w-full">
+                                <input hidden name="id" value="@item.Id" />
+                                <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white font-semibold py-3 px-4 rounded-xl transition-all duration-300 flex items-center justify-center gap-2 shadow-md hover:shadow-lg focus:ring-4 focus:ring-blue-100">
+                                    <span>@Localizer["Book Ticket Now"]</span>
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+
+    <!-- About Section -->
+    <div id="about" class="mb-24 p-12 bg-gradient-to-br from-blue-50 via-white to-indigo-50 dark:from-gray-800 dark:via-gray-900 dark:to-gray-800 rounded-3xl shadow-sm border border-blue-100 dark:border-gray-700 relative overflow-hidden transition-colors">
+        <!-- Decorative background elements -->
+        <div class="absolute top-0 right-0 -mt-10 -mr-10 text-blue-200 dark:text-blue-900/30 opacity-40 transform rotate-12">
+            <svg class="w-64 h-64" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2L2 22h20L12 2zm0 3.8l7.5 15.2H4.5L12 5.8z"/></svg>
+        </div>
+        <div class="absolute bottom-0 left-0 -mb-12 -ml-12 text-indigo-200 dark:text-indigo-900/30 opacity-40 transform -rotate-12">
+            <svg class="w-48 h-48" fill="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/></svg>
+        </div>
+        
+        <div class="relative z-10 max-w-4xl mx-auto text-center space-y-8">
+                <h2 class="text-5xl font-bold tracking-widest text-blue-600 dark:text-blue-400 uppercase">@Localizer["Our Story"]</h2>
+            <h1 class="text-4xl md:text-5xl font-extrabold text-gray-900 dark:text-white tracking-tight">@Localizer["About Tazkartii"]</h1>
+            <p class="text-xl md:text-2xl text-gray-600 dark:text-gray-300 leading-relaxed font-light">
+                    @Localizer["We're"]<span class="font-medium text-blue-700 dark:text-blue-400">@Localizer["seamless"]</span> @Localizer["for a variety"]
+            </p>
+        </div>
+    </div>
+
+    <!-- Contact Section -->
+    <div id="contact" class="max-w-4xl mx-auto">
+        <section class="bg-white dark:bg-gray-800 rounded-3xl shadow-xl shadow-blue-900/5 border border-gray-100 dark:border-gray-700 overflow-hidden relative">
+            <div class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-blue-500 to-indigo-600"></div>
+            <div class="p-8 md:p-14">
+                <div class="text-center mb-10">
+                    <h2 class="text-3xl md:text-4xl font-extrabold text-gray-900 dark:text-white tracking-tight mb-4">
+                        @Localizer["Get in Touch"]
+                    </h2>
+                    <p class="text-lg font-light text-gray-500 dark:text-gray-400">
+                        @Localizer["Got"]
+                    </p>
+                </div>
+                <form action="#" class="space-y-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label for="email" class="block mb-2 text-sm font-semibold text-gray-700 dark:text-gray-300">@Localizer["Email Address"]</label>
+                            <input type="email" id="email" class="bg-gray-50 border border-gray-200 text-gray-900 text-sm rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 block w-full p-4 transition-all dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="hello@example.com" required />
+                        </div>
+                        <div>
+                            <label for="subject" class="block mb-2 text-sm font-semibold text-gray-700 dark:text-gray-300">@Localizer["Subject"]</label>
+                            <input type="text" id="subject" class="bg-gray-50 border border-gray-200 text-gray-900 text-sm rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 block w-full p-4 transition-all dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="@Localizer["How can we help?"]" required />
+                        </div>
+                    </div>
+                    <div>
+                        <label for="message" class="block mb-2 text-sm font-semibold text-gray-700 dark:text-gray-400">@Localizer["Message"]</label>
+                        <textarea id="message" rows="5" class="bg-gray-50 border border-gray-200 text-gray-900 text-sm rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 block w-full p-4 transition-all dark:bg-gray-700 dark:border-gray-600 dark:text-white resize-none" placeholder="@Localizer["Tell"]"></textarea>
+                    </div>
+                    <div class="text-center md:text-left pt-2">
+                        <button type="submit" class="w-full md:w-auto px-10 py-4 text-base font-bold text-white bg-gradient-to-r from-blue-600 to-indigo-600 rounded-xl hover:from-blue-700 hover:to-indigo-700 focus:ring-4 focus:outline-none focus:ring-blue-200 transition-all duration-300 shadow-lg shadow-blue-600/30 transform hover:-translate-y-0.5">
+                            @Localizer["Send Message"]
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </section>
+    </div>
 </div>

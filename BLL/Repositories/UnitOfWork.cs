@@ -1,27 +1,26 @@
 ﻿using BLL.Interfaces;
 using DAL.Context;
 using DAL.Entities;
-using Microsoft.AspNetCore.Identity;
 
 namespace BLL.Repositories
 {
     public class UnitOfWork : IUnitOfWork
     {
-        private readonly AppDbContext _dbContext;
 
-
-        public IEventRepository EventRepository { get; set; }
+        private readonly AppDbContext _context;
+        public IGenaricRepository<Event> EventRepository { get; set; }
         public ITicketRepository TicketRepository { get; set; }
-        public UnitOfWork(AppDbContext dbContext, UserManager<AppUser> userManager)
+
+        public UnitOfWork(ITicketRepository ticketRepository, IGenaricRepository<Event> eventRepository, AppDbContext context)
         {
-            _dbContext = dbContext;
-            TicketRepository = new TicketRepository(_dbContext, userManager);
-            EventRepository = new EventRepository(_dbContext);
+            TicketRepository = ticketRepository;
+            EventRepository = eventRepository;
+            _context = context;
         }
 
         public async Task SaveChangesAsync()
         {
-            await _dbContext.SaveChangesAsync();
+            await _context.SaveChangesAsync();
         }
     }
 }

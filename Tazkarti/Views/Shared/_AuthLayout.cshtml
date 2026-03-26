@@ -1,21 +1,25 @@
-﻿<!DOCTYPE html>
-<html lang="en">
+@{
+    var locale = System.Globalization.CultureInfo.CurrentUICulture.Name;
+    var isRTL = locale.StartsWith("ar");
+}
+<!DOCTYPE html>
+<html lang="@locale" dir="@(isRTL ? "rtl" : "ltr")">
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"]</title>
     <script src="https://cdn.tailwindcss.com?plugins=forms,typography,aspect-ratio,line-clamp,container-queries"></script>
 </head>
-<section class="bg-gray-50 dark:bg-gray-900">
-    <div class="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
+<body class="bg-gray-50 dark:bg-gray-900">
+    <div class="flex flex-col items-center justify-center px-6 py-8 mx-auto min-h-screen">
         <a href="#"
-           class="flex items-center mb-6 text-2xl font-semibold text-gray-900 dark:text-white">
-            <img class="w-8 h-8 mr-2"
+               class="flex items-center mb-6 text-2xl font-semibold text-gray-900 dark:text-white">
+            <img class="w-8 h-8 me-2"
                  src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/logo.svg"
                  alt="logo" />
             TAZKARTII
         </a>
-    @RenderBody()
+        @RenderBody()
     </div>
-</section>
+</body>
 </html>

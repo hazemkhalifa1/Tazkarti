@@ -27,7 +27,11 @@ namespace BLL.Repositories
 
         public async Task<IEnumerable<T>> GetAllAsync() => await _dbContext.Set<T>().Select(x => x).ToListAsync();
 
-        public async Task<T> GetbyIdAsync(int id) => await _dbContext.Set<T>().FindAsync(id);
+        public async Task<T?> GetbyIdAsync(Guid id) => await _dbContext.Set<T>().FindAsync(id);
+
+        public async Task<IEnumerable<T>> Search(string? SearchValue)
+        => SearchValue is not null ? await _dbContext.Set<T>().Where(x => x.Id.ToString().Contains(SearchValue)).ToListAsync() : await GetAllAsync();
+
 
         public void Update(T entity)
         {

@@ -7,6 +7,7 @@ using Tazkarti.Models;
 
 namespace Tazkarti.Controllers
 {
+    [Route("Dashboard/[controller]/[action]")]
     public class UserController : Controller
     {
         private readonly UserManager<AppUser> _userManager;
@@ -31,7 +32,7 @@ namespace Tazkarti.Controllers
                 userVM.Role = role;
                 userVMs.Add(userVM);
             }
-            return View(userVMs);
+            return View("~/Views/Dashboard/User/Index.cshtml", userVMs);
         }
 
         // GET: UserController/Details/5
@@ -39,7 +40,7 @@ namespace Tazkarti.Controllers
         public async Task<ActionResult> Details(string id)
         {
             UserVM mappUsaer = _mapper.Map<UserVM>(await _userManager.FindByIdAsync(id));
-            return View(mappUsaer);
+            return View("~/Views/Dashboard/User/Details.cshtml", mappUsaer);
         }
 
         // GET: UserController/Edit/5
@@ -47,7 +48,7 @@ namespace Tazkarti.Controllers
         public async Task<ActionResult> Edit(string id)
         {
             UserVM mappUser = _mapper.Map<UserVM>(await _userManager.FindByIdAsync(id));
-            return View(mappUser);
+            return View("~/Views/Dashboard/User/Edit.cshtml", mappUser);
         }
 
         // POST: UserController/Edit/5
@@ -73,7 +74,7 @@ namespace Tazkarti.Controllers
             }
             catch
             {
-                return View();
+                return View("~/Views/Dashboard/User/Edit.cshtml");
             }
         }
 
@@ -81,7 +82,7 @@ namespace Tazkarti.Controllers
         [Authorize(Roles = "Admin")]
         public ActionResult Delete(int id)
         {
-            return View();
+            return View("~/Views/Dashboard/User/Delete.cshtml");
         }
 
         // POST: UserController/Delete/5
@@ -96,7 +97,7 @@ namespace Tazkarti.Controllers
             }
             catch
             {
-                return View();
+                return View("~/Views/Dashboard/User/Delete.cshtml");
             }
         }
     }

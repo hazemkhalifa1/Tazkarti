@@ -1,5 +1,9 @@
-﻿<!DOCTYPE html>
-<html lang="en">
+@{
+    var locale = System.Globalization.CultureInfo.CurrentUICulture.Name;
+    var isRTL = locale.StartsWith("ar");
+}
+<!DOCTYPE html>
+<html lang="@locale" dir="@(isRTL ? "rtl" : "ltr")">
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -11,8 +15,11 @@
         <nav class="bg-gray-800 text-white w-64">
             <div class="p-4 flex items-center justify-between">
                 <a asp-controller="Home" asp-action="Index">
-                    <h1 class="text-2xl font-bold">Tazkarti</h1>
+                    <h1 class="text-2xl font-bold uppercase tracking-wider">@Localizer["Tazkarti"]</h1>
                 </a>
+                <div class="flex items-center">
+                    <partial name="_SelectLanguagePartial" />
+                </div>
             </div>
             <ul class="mt-4 space-y-2">
                 <!-- Events Section -->
@@ -29,13 +36,13 @@
                                   stroke-width="2"
                                   d="M9 13h6m-3-3V7m3 6V7"></path>
                         </svg>
-                        <span class="ml-2">Events</span>
+                        <span class="ml-2">@Localizer["Events"]</span>
                     </a>
                 </li>
 
                 <!-- Users Section -->
                 <li>
-                    <a asp-controller="User" asp-actionz="Index"
+                    <a asp-controller="User" asp-action="Index"
                        class="flex items-center p-3 rounded-md hover:bg-gray-700">
                         <svg class="w-6 h-6 text-gray-300"
                              fill="none"
@@ -47,7 +54,7 @@
                                   stroke-width="2"
                                   d="M12 4.354a4.001 4.001 0 100 7.692V10a4 4 0 01-3.998-3.75V5.646z"></path>
                         </svg>
-                        <span class="ml-2">Users</span>
+                        <span class="ml-2">@Localizer["Users"]</span>
                     </a>
                 </li>
 
@@ -65,7 +72,7 @@
                                   stroke-width="2"
                                   d="M12 8v4l3 2"></path>
                         </svg>
-                        <span class="ml-2">Tickets</span>
+                        <span class="ml-2">@Localizer["Tickets"]</span>
                     </a>
                 </li>
             </ul>

@@ -8,6 +8,7 @@ using Tazkarti.Utitly;
 
 namespace Tazkarti.Controllers
 {
+    [Route("Dashboard/[controller]/[action]")]
     [Authorize(Roles = "Admin")]
     public class EventController : Controller
     {
@@ -22,15 +23,17 @@ namespace Tazkarti.Controllers
 
         // GET: EventController
         public async Task<ActionResult> Index()
-            => View(_mapper.Map<IEnumerable<EventVM>>(await _unitOfWork.EventRepository.GetAllAsync()));
+            => View("~/Views/Dashboard/Event/Index.cshtml",
+                _mapper.Map<IEnumerable<EventVM>>(await _unitOfWork.EventRepository.GetAllAsync()));
 
         // GET: EventController/Details/5
-        public async Task<ActionResult> Details(int id)
+        public async Task<ActionResult> Details(Guid id)
         {
-            return View(_mapper.Map<EventVM>(await _unitOfWork.EventRepository.GetbyIdAsync(id)));
+            return View("~/Views/Dashboard/Event/Details.cshtml",
+                _mapper.Map<EventVM>(await _unitOfWork.EventRepository.GetbyIdAsync(id)));
         }
 
-        public ActionResult Create() => View(new EventVM());
+        public ActionResult Create() => View("~/Views/Dashboard/Event/Create.cshtml", new EventVM());
 
         // POST: EventController/Create
         [HttpPost]
@@ -42,43 +45,49 @@ namespace Tazkarti.Controllers
                 if (eventVM.Image is not null)
                     eventVM.ImageName = DocumentSetting.UploadFile(eventVM.Image, "Images");
                 Event e = _mapper.Map<Event>(eventVM);
-                e.NoOfAvailableTickets = e.NoOfTickets;
+                e.Id = Guid.NewGuid();
                 await _unitOfWork.EventRepository.AddAsync(e);
                 await _unitOfWork.SaveChangesAsync();
-                return RedirectToAction(nameof(Index), "Home");
+                return RedirectToAction(nameof(Index));
             }
             catch (Exception ex)
             {
                 ModelState.AddModelError("", ex.Message);
-                return View(nameof(Index), eventVM);
+                return View("~/Views/Dashboard/Event/Create.cshtml", eventVM);
             }
         }
 
         // GET: EventController/Edit/5
-        public async Task<ActionResult> Edit(int id)
+        public async Task<ActionResult> Edit(Guid id)
         {
-            return View(_mapper.Map<EventVM>(await _unitOfWork.EventRepository.GetbyIdAsync(id)));
+            var eventVM = _mapper.Map<EventVM>(await _unitOfWork.EventRepository.GetbyIdAsync(id));
+            return View("~/Views/Dashboard/Event/Edit.cshtml", eventVM);
         }
 
         // POST: EventController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit(int id, EventVM eventVM)
+        public async Task<ActionResult> Edit([FromForm] EventVM eventVM)
         {
-            if (id != eventVM.Id)
-                return BadRequest();
+
             if (ModelState.IsValid)
             {
                 try
                 {
+                    var evant = await _unitOfWork.EventRepository.GetbyIdAsync(eventVM.Id);
+
+                    if (evant is null) return BadRequest();
+
                     if (eventVM.Image is not null)
                     {
                         if (!string.IsNullOrEmpty(eventVM.ImageName))
                             DocumentSetting.DeleteFile(eventVM.ImageName, "Images");
                         eventVM.ImageName = DocumentSetting.UploadFile(eventVM.Image, "Images");
                     }
-
-                    await _unitOfWork.EventRepository.UpdateAsync(_mapper.Map<Event>(eventVM));
+                    else
+                        eventVM.ImageName = evant.ImageName;
+                    _mapper.Map(eventVM, evant);
+                    _unitOfWork.EventRepository.Update(evant);
                     await _unitOfWork.SaveChangesAsync();
                     return RedirectToAction(nameof(Index));
 
@@ -88,19 +97,19 @@ namespace Tazkarti.Controllers
                     ModelState.AddModelError("", ex.Message);
                 }
             }
-            return View(eventVM);
+            return View("~/Views/Dashboard/Event/Edit.cshtml", eventVM);
         }
 
         // GET: EventController/Delete/5
-        public async Task<ActionResult> Delete(int id)
+        public async Task<ActionResult> Delete(Guid id)
         {
-            return View(_mapper.Map<EventVM>(await _unitOfWork.EventRepository.GetbyIdAsync(id)));
+            return View("~/Views/Dashboard/Event/Delete.cshtml", _mapper.Map<EventVM>(await _unitOfWork.EventRepository.GetbyIdAsync(id)));
         }
 
         // POST: EventController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Delete(int id, EventVM eventVM)
+        public async Task<ActionResult> Delete(Guid id, EventVM eventVM)
         {
             if (id != eventVM.Id)
                 return BadRequest();
@@ -116,7 +125,7 @@ namespace Tazkarti.Controllers
             {
                 ModelState.AddModelError("", ex.Message);
             }
-            return View(eventVM);
+            return View("~/Views/Dashboard/Event/Delete.cshtml", eventVM);
         }
     }
 }
