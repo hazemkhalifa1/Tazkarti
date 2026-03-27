@@ -5,6 +5,8 @@ using DAL.Entities;
 using DAL.Resource;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Serilog;
+using Serilog.Events;
 using System.Reflection;
 
 namespace Tazkarti
@@ -14,6 +16,20 @@ namespace Tazkarti
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+
+            Log.Logger = new LoggerConfiguration()
+                .WriteTo.Console()
+                .WriteTo.File("logs/app-.log",
+                    rollingInterval: RollingInterval.Day,
+                    retainedFileCountLimit: 30,
+                    outputTemplate: "{Timestamp:yyyy-MM-dd HH:mm:ss} [{Level}] {Message}{NewLine}{Exception}")
+                .MinimumLevel.Information()
+                .MinimumLevel.Override("Microsoft.EntityFrameworkCore.Database.Command", LogEventLevel.Information)
+                .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
+                .MinimumLevel.Override("System", LogEventLevel.Warning)
+                .CreateLogger();
+
+            builder.Services.AddSerilog();
 
             // Add services to the container.
             builder.Services.AddControllersWithViews()
@@ -44,10 +60,8 @@ namespace Tazkarti
             {
                 options.Password.RequireDigit = true;
                 options.Password.RequireLowercase = true;
-            })
-
-    .AddEntityFrameworkStores<AppDbContext>()
-    .AddDefaultTokenProviders();
+            }).AddEntityFrameworkStores<AppDbContext>()
+              .AddDefaultTokenProviders();
 
             var app = builder.Build();
 
@@ -58,6 +72,8 @@ namespace Tazkarti
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+
+            app.UseSerilogRequestLogging();
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
