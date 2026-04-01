@@ -7,6 +7,7 @@ namespace Tazkarti.Models
         public Guid Id { get; set; }
         public string EventName { get; set; }
         public string EventNameAr { get; set; }
+        public string UserName { get; set; }
         public bool Valid { get; set; }
         [EmailAddress]
         [Required(ErrorMessage = "Email Is Required")]

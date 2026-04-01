@@ -9,9 +9,12 @@ namespace DAL.Entities
         public string PhoneNumber { get; set; }
         public bool Valid { get; set; }
 
-        [ForeignKey("event")]
+        [ForeignKey(nameof(Event))]
         public Guid EventID { get; set; }
         public Event Event { get; set; }
+        [ForeignKey(nameof(User))]
+        public string UserId { get; set; }
+        public AppUser User { get; set; }
 
     }
 }

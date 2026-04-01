@@ -4,6 +4,6 @@ namespace DAL.Entities
 {
     public class AppUser : IdentityUser
     {
-        public ICollection<Ticket> tickets { get; set; }
+        public IEnumerable<Ticket> Tickets { get; set; }
     }
 }

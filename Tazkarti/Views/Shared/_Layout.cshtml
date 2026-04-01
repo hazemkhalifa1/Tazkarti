@@ -1,6 +1,7 @@
 @{
     var locale = System.Globalization.CultureInfo.CurrentUICulture.Name;
     var isRTL = locale.StartsWith("ar");
+    var isAuth = User.Identity.IsAuthenticated;
 }
 <!DOCTYPE html>
 <html lang="@locale" dir="@(isRTL ? "rtl" : "ltr")" class="light">
@@ -116,15 +117,41 @@
                 >@Localizer["About"]</a>
             </li>
             <li>
-              <a asp-action="Index" asp-controller="Home"  asp-fragment="contact"
+              <a asp-action="Index" asp-controller="Home" asp-fragment="contact"
                 class="block py-2 px-3 text-gray-900 dark:text-gray-300 rounded hover:bg-gray-100 dark:hover:bg-gray-700 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 dark:md:hover:text-blue-500 md:p-0 transition-colors"
                 >@Localizer["Contact"]</a>
             </li>
-            @if(ViewBag.User){<li>
+            
+            @if(User.IsInRole("Admin")){
+                <li>
               <a asp-action="Index" asp-controller="Event"  asp-fragment="index"
                 class="block py-2 px-3 text-gray-900 dark:text-gray-300 rounded hover:bg-gray-100 dark:hover:bg-gray-700 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 dark:md:hover:text-blue-500 md:p-0 transition-colors"
                 >@Localizer["Dashboard"]</a>
-            </li>}
+            </li>
+            }
+            @if (isAuth)
+            {
+                <li>
+                    <a asp-action="UserTickets" asp-controller="Home" 
+                       class="flex items-center py-2 px-3 text-gray-900 dark:text-gray-300 rounded hover:bg-gray-100 dark:hover:bg-gray-700 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 dark:md:hover:text-blue-500 md:p-0 transition-colors"
+                       >
+                       @Localizer["My Tickets"]</a>
+                </li>
+                <li>
+                  <a asp-action="Logout" asp-controller="Account"
+                    class="block py-2 px-3 text-gray-900 dark:text-gray-300 rounded hover:bg-gray-100 dark:hover:bg-gray-700 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 dark:md:hover:text-blue-500 md:p-0 transition-colors"
+                    >@Localizer["Logout"]
+                  </a>
+                </li>
+            }
+            else
+            {
+              <li>
+                <a asp-action="Login" asp-controller="Account"
+                  class="block py-2 px-3 text-gray-900 dark:text-gray-300 rounded hover:bg-gray-100 dark:hover:bg-gray-700 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 dark:md:hover:text-blue-500 md:p-0 transition-colors"
+                  >@Localizer["Login"]</a>
+              </li>
+            }
           </ul>
         </div>
       </div>

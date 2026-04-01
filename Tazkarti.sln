@@ -1,13 +1,15 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.11.35208.52
+# Visual Studio Version 18
+VisualStudioVersion = 18.4.11620.152
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tazkarti", "Tazkarti\Tazkarti.csproj", "{0E1BE287-EE4C-4B4D-B0C0-B349D084F9BC}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BLL", "BLL\BLL.csproj", "{3B47AF2C-1531-4A27-9D98-D7B97460538B}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DAL", "DAL\DAL.csproj", "{A0941FB3-BC09-4850-9685-1F600F0A5D2F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tazkarti.Tests", "Tazkarti.Tests\Tazkarti.Tests.csproj", "{50D58DD2-05B2-7997-E5FD-0AC58D4B3764}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +29,10 @@ Global
 		{A0941FB3-BC09-4850-9685-1F600F0A5D2F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A0941FB3-BC09-4850-9685-1F600F0A5D2F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A0941FB3-BC09-4850-9685-1F600F0A5D2F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{50D58DD2-05B2-7997-E5FD-0AC58D4B3764}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{50D58DD2-05B2-7997-E5FD-0AC58D4B3764}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{50D58DD2-05B2-7997-E5FD-0AC58D4B3764}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{50D58DD2-05B2-7997-E5FD-0AC58D4B3764}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

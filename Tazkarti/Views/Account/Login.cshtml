@@ -27,12 +27,23 @@
             <div>
                 <label for="password"
                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">@Localizer["Password"]</label>
-                <input type="password"
-                       asp-for="Pass"
-                       id="password"
-                       placeholder="••••••••"
-                       class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                       required="" />
+                <div class="relative">
+                    <input type="password"
+                           asp-for="Pass"
+                           id="password"
+                           placeholder="••••••••"
+                           class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 pe-10 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                           required="" />
+                    <button type="button" id="togglePassword" class="absolute inset-y-0 end-0 flex items-center pe-3 text-gray-500 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-500 transition-colors">
+                        <svg id="eyeIcon" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                        </svg>
+                        <svg id="eyeSlashIcon" class="hidden w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88L3 3m11.12 11.12L21 21"></path>
+                        </svg>
+                    </button>
+                </div>
             </div>
             <div class="flex items-start">
                 <div class="flex items-center h-5">
@@ -68,19 +79,16 @@
 </div>
 
 <script>
-		document.getElementById('passwordToggleBtn').addEventListener('click', function (e) {
-			e.preventDefault();
-			const passwordInput = document.getElementById('passwordInput');
-			const icon = this.querySelector('i');
+    const togglePassword = document.querySelector('#togglePassword');
+    const passwordInput = document.querySelector('#password');
+    const eyeIcon = document.querySelector('#eyeIcon');
+    const eyeSlashIcon = document.querySelector('#eyeSlashIcon');
 
-			if (passwordInput.type === 'password') {
-				passwordInput.type = 'text';
-				icon.classList.remove('fa-eye');
-				icon.classList.add('fa-eye-slash');
-			} else {
-				passwordInput.type = 'password';
-				icon.classList.remove('fa-eye-slash');
-				icon.classList.add('fa-eye');
-			}
-		});
-	</script>
+    togglePassword.addEventListener('click', function (e) {
+        const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+        passwordInput.setAttribute('type', type);
+        
+        eyeIcon.classList.toggle('hidden');
+        eyeSlashIcon.classList.toggle('hidden');
+    });
+</script>

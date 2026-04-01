@@ -1,0 +1,451 @@
+@model IEnumerable<UserTicketVM>
+
+@{
+    ViewData["Title"] = Localizer["My Tickets"];
+    var locale = System.Globalization.CultureInfo.CurrentUICulture.Name;
+    var isRTL = locale.StartsWith("ar");
+}
+
+<div class="py-12 bg-gray-50 dark:bg-gray-800 min-h-screen transition-colors duration-300">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="mb-10 text-center">
+            <h1 class="text-4xl font-extrabold text-blue-700 dark:text-blue-500 mb-4 animate-fade-in">
+                @Localizer["My Tickets"]
+            </h1>
+            <p class="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+                @Localizer["Review and manage all your purchased tickets in one place."]
+            </p>
+        </div>
+
+        @if (Model == null || !Model.Any())
+        {
+            <div class="flex flex-col items-center justify-center p-12 bg-white dark:bg-gray-900 rounded-2xl shadow-xl transition-colors">
+                <div class="w-24 h-24 bg-blue-100 dark:bg-blue-900/30 rounded-full flex items-center justify-center mb-6">
+                    <svg class="w-12 h-12 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z"></path>
+                    </svg>
+                </div>
+                <h3 class="text-2xl font-bold text-gray-800 dark:text-white mb-2">@Localizer["No tickets found"]</h3>
+                <p class="text-gray-500 dark:text-gray-400 mb-8">@Localizer["You haven't purchased any tickets yet. Explore our events and get your first one!"]</p>
+                <a asp-action="Index" asp-controller="Home" asp-fragment="our-events" class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all transform hover:scale-105">
+                    @Localizer["Explore Events"]
+                </a>
+            </div>
+        }
+        else
+        {
+            <!-- Search Bar -->
+            <div class="mb-10 max-w-lg mx-auto">
+                <div class="relative group">
+                    <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                        <svg class="h-5 w-5 text-gray-400 group-focus-within:text-blue-500 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                        </svg>
+                    </div>
+                    <input type="text" id="ticketSearch" 
+                           class="block w-full pl-11 pr-4 py-4 border-2 border-gray-100 dark:border-gray-700 rounded-2xl leading-5 bg-white dark:bg-gray-900 text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent sm:text-sm transition-all shadow-sm hover:shadow-md" 
+                           placeholder="@Localizer["Search..."]">
+                </div>
+            </div>
+
+            <div id="ticketsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                @foreach (var ticket in Model)
+                {
+                    <div class="ticket-card group relative bg-white dark:bg-gray-900 rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 border border-transparent hover:border-blue-500/30 flex flex-col"
+                         data-id="@ticket.Id"
+                         data-event="@(isRTL ? ticket.EventVM.NameAr : ticket.EventVM.Name)"
+                         data-name="@ticket.Name"
+                         data-email="@ticket.Email"
+                         data-phone="@ticket.PhoneNumber"
+                         data-place="@(isRTL ? ticket.EventVM.placeAr : ticket.EventVM.place)"
+                         data-time="@(ticket.EventVM.Time?.ToString("f") ?? "")"
+                         data-price="@ticket.EventVM.Price"
+                         data-image="/Files/Images/@ticket.EventVM.ImageName">
+                        
+                        <!-- Event Image Header -->
+                        <div class="relative h-48 w-full flex-shrink-0 overflow-hidden">
+                            <img src="/Files/Images/@ticket.EventVM.ImageName" alt="Event" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                            <div class="absolute bottom-4 left-6 right-6 flex justify-between items-end">
+                                <h3 class="text-xl font-bold text-white mb-0 drop-shadow-lg">
+                                    @(isRTL ? ticket.EventVM.NameAr : ticket.EventVM.Name)
+                                </h3>
+                            </div>
+                        </div>
+
+                        <div class="p-6 flex-grow flex flex-col relative">
+                            <!-- Decorative Ticket Edge -->
+                            <div class="absolute -left-4 top-0 w-8 h-8 bg-gray-50 dark:bg-gray-800 rounded-full shadow-inner z-10 -translate-y-1/2"></div>
+                            <div class="absolute -right-4 top-0 w-8 h-8 bg-gray-50 dark:bg-gray-800 rounded-full shadow-inner z-10 -translate-y-1/2"></div>
+
+                            <!-- Ticket Status & ID -->
+                            <div class="flex justify-between items-start mb-6">
+                                <span class="px-3 py-1 rounded-full text-xs font-semibold @(ticket.Valid ? "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400" : "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400")">
+                                    @((ticket.Valid ? Localizer["Active"] : Localizer["Invalid"]).Value)
+                                </span>
+                                <span class="text-xs text-gray-400 uppercase tracking-widest font-mono">#@ticket.Id.ToString().Substring(0, 8).ToUpper()</span>
+                            </div>
+
+                            <!-- Details Grid -->
+                            <div class="grid grid-cols-2 gap-4 mb-6">
+                                <div class="space-y-3">
+                                    <div class="flex items-center text-sm text-gray-600 dark:text-gray-400">
+                                        <svg class="w-4 h-4 mr-2 rtl:ml-2 rtl:mr-0 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+                                        <span class="truncate">@ticket.Name</span>
+                                    </div>
+                                    <div class="flex items-center text-sm text-gray-600 dark:text-gray-400">
+                                        <svg class="w-4 h-4 mr-2 rtl:ml-2 rtl:mr-0 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path></svg>
+                                        <span class="truncate">@(isRTL ? ticket.EventVM.placeAr : ticket.EventVM.place)</span>
+                                    </div>
+                                </div>
+                                <div class="space-y-3">
+                                    <div class="flex items-center text-sm text-gray-600 dark:text-gray-400">
+                                        <svg class="w-4 h-4 mr-2 rtl:ml-2 rtl:mr-0 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                                        <span class="truncate">@ticket.EventVM.Time?.ToString("MM/dd HH:mm")</span>
+                                    </div>
+                                    <div class="flex items-center text-sm font-bold text-blue-600 dark:text-blue-400">
+                                        <svg class="w-4 h-4 mr-2 rtl:ml-2 rtl:mr-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                        <span>@ticket.EventVM.Price EGP</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Action Area -->
+                            <div class="pt-6 border-t border-dashed border-gray-200 dark:border-gray-700 mt-auto">
+                                <div class="flex items-center justify-between">
+                                    <div class="w-10 h-10 bg-gray-100 dark:bg-gray-800 rounded-lg flex items-center justify-center">
+                                        <svg class="w-6 h-6 text-gray-400" viewBox="0 0 24 24" fill="currentColor"><path d="M3,3H9V9H3V3M5,5V7H7V5H5M15,3H21V9H15V3M17,5V7H19V5H17M3,15H9V21H3V15M5,17V19H7V17H5M15,15H17V17H15V15M17,17H19V19H17V17M19,19H21V21H19V19M19,15H21V17H19V15M13,3H13V5H11V3H13M13,7H11V5H13V7M11,9H13V7H11V9M9,11H11V13H9V11M7,11H9V9H7V11M5,11H7V13H5V11M3,11H5V9H3V11M13,11H11V9H13V11M11,13H13V15H11V13M15,11H13V13H15V11M15,9H13V11H15V9M17,11H15V9H17V11M19,11H17V13H19V11M21,11H19V9H21V11M11,17H13V15H11V17M11,21H13V19H11V21M13,19H15V17H13V19M13,15H15V13H13V15M17,13H15V15H17V13M19,13H21V15H19V13M17,21H15V19H17V21M19,21H17V19H19V21Z"/></svg>
+                                    </div>
+                                    <button onclick="downloadTicket(this)"
+                                    id="downloadTicketBtn"
+                                            class="text-blue-600 dark:text-blue-400 font-semibold text-sm hover:underline flex items-center">
+                                        @Localizer["Download Ticket"]
+                                        <svg class="w-4 h-4 ml-1 rtl:mr-1 rtl:ml-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+    </div>
+</div>
+
+<style>
+    keyframes fadeIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    .animate-fade-in {
+        animation: fadeIn 0.8s ease-out forwards;
+    }
+</style>
+
+<!-- ========== HIDDEN PRINTABLE TICKET TEMPLATE ========== -->
+<div id="hiddenTicketContainer" style="display:none;">
+    <div style="padding: 1.5rem 0; font-family: var(--font-sans);">
+
+        <div id="printable-ticket" style="
+            max-width: 780px;
+            margin: 0 auto;
+            background: #ffffff;
+            border: 0.5px solid #e5e7eb;
+            border-radius: 0.75rem;
+            overflow: hidden;
+        ">
+            <!-- Inner flex container: image + content side by side -->
+            <div id="ticket-inner" style="display: flex; flex-direction: row; min-height: 320px;">
+                <!-- Event Image (left by default) -->
+                <div id="ticket-image-wrap" style="width: 240px; flex-shrink: 0; position: relative; overflow: hidden;">
+                    <img id="pdf-event-img"
+                         src="https://images.unsplash.com/photo-1501281668745-f7f57925c3b4?w=600&q=80"
+                         alt="Event"
+                         style="width: 100%; height: 100%; object-fit: cover; display: block;"
+                    />
+                    <!-- gradient overlay toward content side -->
+                    <div id="img-overlay" style="position: absolute; inset: 0; background: linear-gradient(to right, rgba(0,0,0,0.08), rgba(0,0,0,0.52));"></div>
+                    <!-- Vertical brand label -->
+                    <div style="position: absolute; bottom: 20px; left: 0; right: 0; text-align: center;">
+                        <p style="font-size: 11px; font-weight: 500; color: rgba(255,255,255,0.7); letter-spacing: 2px; text-transform: uppercase; margin: 0; writing-mode: horizontal-tb;">TAZKARTI</p>
+                    </div>
+                </div>
+
+                <!-- Sawtooth vertical divider -->
+                <div id="divider-wrap" style="width: 18px; flex-shrink: 0; position: relative; background: #ffffff; overflow: hidden;">
+                    <svg id="divider-svg" viewBox="0 0 18 320" xmlns="http://www.w3.org/2000/svg" style="position: absolute; top: 0; left: 0; height: 100%; width: 100%;" preserveAspectRatio="none">
+                        <path id="divider-path"
+                              d="M18,0 L18,320 L8,310 L18,300 L8,290 L18,280 L8,270 L18,260 L8,250 L18,240 L8,230 L18,220 L8,210 L18,200 L8,190 L18,180 L8,170 L18,160 L8,150 L18,140 L8,130 L18,120 L8,110 L18,100 L8,90 L18,80 L8,70 L18,60 L8,50 L18,40 L8,30 L18,20 L8,10 L18,0 Z"
+                              fill="#0f172a" opacity="0.85"/>
+                    </svg>
+                </div>
+
+                <!-- Content area -->
+                <div style="flex: 1; display: flex; flex-direction: column; justify-content: space-between; padding: 28px 28px 0;">
+                    <!-- Top: ticket id + event name -->
+                    <div style="margin-bottom: 20px;">
+                        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px;">
+                            <div>
+                                <p style="font-size: 11px; font-weight: 500; color: #94a3b8; text-transform: uppercase; letter-spacing: 1.2px; margin: 0 0 5px;">@Localizer["Event"]</p>
+                                <h1 id="pdf-event-name" style="font-size: 20px; font-weight: 500; color: #1e293b; margin: 0; line-height: 1.25;">Summer Music Festival 2025</h1>
+                            </div>
+                            <div style="text-align: right; flex-shrink: 0; margin-left: 12px;">
+                                <p style="font-size: 11px; font-weight: 500; color: #94a3b8; text-transform: uppercase; letter-spacing: 1px; margin: 0 0 4px;">@Localizer["Ticket ID"]</p>
+                                <p id="pdf-ticket-id" style="font-size: 13px; font-weight: 500; color: #1d4ed8; margin: 0; font-family: ui-monospace, Consolas, monospace;">#TZK-20485</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Event meta row -->
+                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 20px;">
+                        <div>
+                            <p style="font-size: 11px; font-weight: 500; color: #94a3b8; text-transform: uppercase; letter-spacing: 1px; margin: 0 0 4px;">@Localizer["Date & time"]</p>
+                            <p id="pdf-event-time" style="font-size: 14px; font-weight: 500; color: #1e293b; margin: 0;">Aug 24, 2025 · 20:00</p>
+                        </div>
+                        <div>
+                            <p style="font-size: 11px; font-weight: 500; color: #94a3b8; text-transform: uppercase; letter-spacing: 1px; margin: 0 0 4px;">@Localizer["Venue"]</p>
+                            <p id="pdf-event-place" style="font-size: 14px; font-weight: 500; color: #1e293b; margin: 0;">Cairo Opera House</p>
+                        </div>
+                        <div>
+                            <p style="font-size: 11px; font-weight: 500; color: #94a3b8; text-transform: uppercase; letter-spacing: 1px; margin: 0 0 4px;">@Localizer["Price"]</p>
+                            <p id="pdf-event-price" style="font-size: 14px; font-weight: 500; color: #1d4ed8; margin: 0;">350.00 EGP</p>
+                        </div>
+                    </div>
+
+                    <!-- Dashed separator -->
+                    <div style="border-top: 1.5px dashed #e2e8f0; margin-bottom: 18px;"></div>
+
+                    <!-- Attendee + QR row -->
+                    <div style="display: flex; align-items: center; justify-content: space-between; padding-bottom: 24px;">
+                        <!-- Attendee -->
+                        <div style="display: flex; gap: 14px; align-items: center;">
+                            <div id="attendee-initials" style="width: 42px; height: 42px; border-radius: 50%; background: #dbeafe; display: flex; align-items: center; justify-content: center; font-size: 15px; font-weight: 500; color: #1d4ed8; flex-shrink: 0;">JD</div>
+                            <div>
+                                <p style="font-size: 11px; font-weight: 500; color: #94a3b8; text-transform: uppercase; letter-spacing: 1px; margin: 0 0 3px;">@Localizer["Attendee"]</p>
+                                <p id="pdf-user-name" style="font-size: 14px; font-weight: 500; color: #1e293b; margin: 0 0 2px;">John Doe</p>
+                                <p id="pdf-user-email" style="font-size: 12px; color: #64748b; margin: 0;">john@example.com</p>
+                                <p id="pdf-user-phone" style="font-size: 12px; color: #64748b; margin: 2px 0 0;">+20 100 123 4567</p>
+                            </div>
+                        </div>
+
+<!-- QR Code -->
+<div style="display: flex; flex-direction: column; align-items: center; gap: 8px; padding-left: 20px; border-left: 1px dashed #e2e8f0;">
+    <div style="width: 80px; height: 80px; background: #f9fafb; border-radius: 0.375rem; border: 0.5px solid #e5e7eb; display: flex; align-items: center; justify-content: center;">
+        <svg width="52" height="52" viewBox="0 0 70 70" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="2" y="2" width="28" height="28" rx="2" stroke="#1e293b" stroke-width="2" fill="white"/>
+            <rect x="10" y="10" width="12" height="12" rx="1" fill="#1e293b"/>
+            <rect x="40" y="2" width="28" height="28" rx="2" stroke="#1e293b" stroke-width="2" fill="white"/>
+            <rect x="48" y="10" width="12" height="12" rx="1" fill="#1e293b"/>
+            <rect x="2" y="40" width="28" height="28" rx="2" stroke="#1e293b" stroke-width="2" fill="white"/>
+            <rect x="10" y="48" width="12" height="12" rx="1" fill="#1e293b"/>
+            <rect x="40" y="40" width="8" height="8" rx="1" fill="#1e293b"/>
+            <rect x="52" y="40" width="8" height="8" rx="1" fill="#1e293b"/>
+            <rect x="40" y="52" width="8" height="8" rx="1" fill="#1e293b"/>
+            <rect x="52" y="60" width="8" height="8" rx="1" fill="#1e293b"/>
+        </svg>
+    </div>
+    <p style="font-size: 10px; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.8px; margin: 0; text-align: center;">@Localizer["Scan at entrance"]</p>
+</div>
+                    </div>
+
+                    <!-- Footer band -->
+                    <div style="background: #0f172a; margin: 0 -28px; padding: 10px 28px; display: flex; justify-content: space-between; align-items: center;">
+                        <p style="font-size: 11px; color: #475569; margin: 0;">@Localizer["Official document"]</p>
+                        <p style="font-size: 11px; font-weight: 500; color: #64748b; margin: 0; text-transform: uppercase; letter-spacing: 0.8px;">@Localizer["Do not share"]</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    // layout toggle script for the hidden ticket (modified to use Razor isRTL)
+    let isRTLHidden = @(isRTL ? "true" : "false");
+
+    function applyLayoutHidden() {
+        const inner = document.getElementById('ticket-inner');
+        const imgWrap = document.getElementById('ticket-image-wrap');
+        const overlay = document.getElementById('img-overlay');
+        const divPath = document.getElementById('divider-path');
+        const btn = document.getElementById('toggle-btn');
+
+        if (!inner) return; // in case script runs before hidden ticket is rendered
+
+        if (isRTLHidden) {
+            inner.style.flexDirection = 'row-reverse';
+            if (overlay) overlay.style.background = 'linear-gradient(to left, rgba(0,0,0,0.08), rgba(0,0,0,0.52))';
+            if (divPath) divPath.setAttribute('d',
+                'M0,0 L0,320 L10,310 L0,300 L10,290 L0,280 L10,270 L0,260 L10,250 L0,240 L10,230 L0,220 L10,210 L0,200 L10,190 L0,180 L10,170 L0,160 L10,150 L0,140 L10,130 L0,120 L10,110 L0,100 L10,90 L0,80 L10,70 L0,60 L10,50 L0,40 L10,30 L0,20 L10,10 L0,0 Z'
+            );
+            if (btn) btn.textContent = 'Switch to LTR (English)';
+        } else {
+            inner.style.flexDirection = 'row';
+            if (overlay) overlay.style.background = 'linear-gradient(to right, rgba(0,0,0,0.08), rgba(0,0,0,0.52))';
+            if (divPath) divPath.setAttribute('d',
+                'M18,0 L18,320 L8,310 L18,300 L8,290 L18,280 L8,270 L18,260 L8,250 L18,240 L8,230 L18,220 L8,210 L18,200 L8,190 L18,180 L8,170 L18,160 L8,150 L18,140 L8,130 L18,120 L8,110 L18,100 L8,90 L18,80 L8,70 L18,60 L8,50 L18,40 L8,30 L18,20 L8,10 L18,0 Z'
+            );
+            if (btn) btn.textContent = 'Switch to RTL (عربي)';
+        }
+    }
+
+    // expose toggle globally for the button click (Disabled since toggleRTLHidden is undefined)
+    // window.toggleRTL = toggleRTLHidden;
+
+    // run on DOM ready
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', applyLayoutHidden);
+    } else {
+        applyLayoutHidden();
+    }
+</script>
+
+@section Scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html-to-image/1.11.11/html-to-image.min.js"></script>
+    <script>
+        function downloadTicket(button) {
+            const card = $(button).closest('.ticket-card');
+            
+            // Extract data
+            const id = card.data('id') || '';
+            const eventName = card.data('event') || '';
+            const ticketName = card.data('name') || '';
+            const email = card.data('email') || '';
+            const phone = card.data('phone') || '';
+            const place = card.data('place') || '';
+            const time = card.data('time') || '';
+            const price = card.data('price') || '';
+            const imageUrl = card.data('image') || '';
+            
+            // Format ID
+            const shortId = id ? '#' + id.toString().substring(0, 8).toUpperCase() : '';
+
+            // Get Initials
+            let initials = 'U';
+            if (ticketName) {
+                const parts = ticketName.trim().split(' ');
+                initials = parts.length > 1 ? (parts[0][0] + parts[1][0]).toUpperCase() : parts[0][0].toUpperCase();
+            }
+
+            // Populate the hidden ticket container
+            $('#pdf-event-name').text(eventName);
+            $('#pdf-ticket-id').text(shortId);
+            $('#pdf-event-time').text(time);
+            $('#pdf-event-place').text(place);
+            $('#pdf-event-price').text(price + ' EGP');
+            $('#pdf-user-name').text(ticketName);
+            $('#pdf-user-email').text(email);
+            $('#pdf-user-phone').text(phone || 'N/A');
+            $('#attendee-initials').text(initials);
+            $('#pdf-event-img').attr('src', imageUrl);
+
+            const container = document.getElementById('hiddenTicketContainer');
+            
+            // Temporarily show container for html2pdf to process
+            container.style.display = 'block';
+            container.style.position = 'absolute';
+            container.style.left = '-9999px';
+            container.style.top = '0';
+            
+            // Ensure layout applied (in case needed)
+            if (typeof applyLayoutHidden === 'function') {
+                applyLayoutHidden();
+            }
+
+            const elementRoot = document.getElementById('printable-ticket');
+            
+            // Wait for image to load to make sure background shows
+            const img = document.getElementById('pdf-event-img');
+            if (img.complete) {
+                generatePDF(elementRoot, container, shortId);
+            } else {
+                img.onload = function() {
+                    generatePDF(elementRoot, container, shortId);
+                };
+                // Fallback in case image loading hangs
+                setTimeout(() => { generatePDF(elementRoot, container, shortId); }, 1500);
+            }
+              function generatePDF(element, container, shortId) {
+            // Un-hide the container temporarily for drawing
+            if(container) {
+                container.style.display = 'block';
+                container.style.position = 'absolute';
+                container.style.left = '-9999px';
+                container.style.top = '0';
+            }
+
+            // Using pure html-to-image + jsPDF. 
+            // html-to-image uses Safari/Chrome's native SVG foreignObject renderer.
+            // This natively supports Arabic text shaping and correct RTL Flexbox formatting.
+            const { jsPDF } = window.jspdf;
+            
+            htmlToImage.toJpeg(element, { 
+                quality: 1.0, 
+                pixelRatio: 2,
+                backgroundColor: '#ffffff'
+            }).then(imgData => {
+                // Calculate dimensions for A4 Landscape
+                const pdf = new jsPDF('l', 'mm', 'a4');
+                const pdfWidth = pdf.internal.pageSize.getWidth();
+                const pdfHeight = pdf.internal.pageSize.getHeight();
+                
+                // Keep aspect ratio
+                // Since pixelRatio is 2, the image dimensions are doubled, so we scale it down accurately.
+                const img = new Image();
+                img.src = imgData;
+                img.onload = () => {
+                    const imgWidth = img.width;
+                    const imgHeight = img.height;
+                    const ratio = Math.min(pdfWidth / imgWidth, pdfHeight / imgHeight);
+                    
+                    const finalWidth = imgWidth * ratio;
+                    const finalHeight = imgHeight * ratio;
+                    const xOffset = (pdfWidth - finalWidth) / 2;
+                    const yOffset = (pdfHeight - finalHeight) / 2;
+
+                    pdf.addImage(imgData, 'JPEG', xOffset, yOffset, finalWidth, finalHeight);
+                    pdf.save(`Ticket_${shortId.replace('#','')}.pdf`);
+                    
+                    // Hide again
+                    if(container) {
+                        container.style.display = 'none';
+                        container.style.position = '';
+                        container.style.left = '';
+                        container.style.top = '';
+                    }
+                };
+            }).catch(function (error) {
+                console.error('oops, something went wrong!', error);
+                
+                // Hide again on error
+                if(container) {
+                    container.style.display = 'none';
+                    container.style.position = '';
+                    container.style.left = '';
+                    container.style.top = '';
+                }
+            });
+        }    }
+
+        $(document).ready(function () {
+            $("#ticketSearch").on("keyup", function () {
+                var value = $(this).val().toLowerCase();
+                $(".ticket-card").each(function () {
+                    var $card = $(this);
+                    var eventName = $card.data("event") ? $card.data("event").toString().toLowerCase() : "";
+                    var customerName = $card.data("name") ? $card.data("name").toString().toLowerCase() : "";
+                    
+                    var matches = eventName.indexOf(value) > -1 || customerName.indexOf(value) > -1;
+                    
+                    if (matches) {
+                        $card.show();
+                    } else {
+                        $card.hide();
+                    }
+                });
+            });
+        });
+    </script>
+}

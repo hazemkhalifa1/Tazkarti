@@ -1,9 +1,13 @@
 using AutoMapper;
 using BLL.Interfaces;
 using DAL.Entities;
+using DAL.Resource;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Localization;
+using System.Security.Claims;
+using System.Text.Json;
 using Tazkarti.Models;
 
 namespace Tazkarti.Controllers
@@ -14,35 +18,45 @@ namespace Tazkarti.Controllers
         private readonly ILogger<HomeController> _logger;
         private readonly IMapper _mapper;
         private readonly UserManager<AppUser> _userManager;
+        private readonly IStringLocalizer<SharedResource> Localizer;
 
-        public HomeController(IUnitOfWork unitOfWork, ILogger<HomeController> logger, IMapper mapper, UserManager<AppUser> userManager)
+        public HomeController(IUnitOfWork unitOfWork, ILogger<HomeController> logger, IMapper mapper, UserManager<AppUser> userManager, IStringLocalizer<SharedResource> localizer)
         {
             _unitOfWork = unitOfWork;
             _logger = logger;
             _mapper = mapper;
             _userManager = userManager;
+            Localizer = localizer;
         }
 
+        [Authorize]
+        [HttpGet]
+        public async Task<IActionResult> UserTickets()
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (string.IsNullOrEmpty(userId))
+            {
+                ViewBag.ErrorMessage = Localizer["User not found"];
+                _logger.LogError("User ID not found in claims.");
+                return RedirectToAction(nameof(Index));
+            }
+            var TicketsVM = _mapper.Map<IEnumerable<UserTicketVM>>(await _unitOfWork.TicketRepository.GetAllForUserAsync(userId));
+            return View(TicketsVM);
+        }
 
         public async Task<IActionResult> Index()
-        {
-            ViewBag.User = User.IsInRole("Admin");
-            var EventsVM = _mapper.Map<IEnumerable<EventVM>>(await _unitOfWork.EventRepository.GetAllAsync());
-            return View(EventsVM);
-        }
+            => View(_mapper.Map<IEnumerable<EventVM>>(await _unitOfWork.EventRepository.GetAllAsync()));
+
 
         [Authorize]
 
         public async Task<IActionResult> EventDetails(Guid id)
-        {
-            ViewBag.User = User.IsInRole("Admin");
-            return View(_mapper.Map<EventVM>(await _unitOfWork.EventRepository.GetbyIdAsync(id)));
-        }
+        => View(_mapper.Map<EventVM>(await _unitOfWork.EventRepository.GetbyIdAsync(id)));
+
 
         [Authorize]
         public async Task<IActionResult> TicketsDetails(Guid id, int numOfTicket)
         {
-            ViewBag.User = User.IsInRole("Admin");
             var eventItem = await _unitOfWork.EventRepository.GetbyIdAsync(id);
             if (eventItem == null) return NotFound();
 
@@ -58,23 +72,30 @@ namespace Tazkarti.Controllers
         }
 
         [Authorize]
-        [HttpPost]
-        public async Task<IActionResult> Booking(Guid id, TicketDetailsViewModel ticketDetailsViewModel)
+        public async Task<IActionResult> Booking(string key)
         {
-            if (!ModelState.IsValid)
+            var serializedData = HttpContext.Session.GetString(key);
+            if (string.IsNullOrEmpty(serializedData))
             {
-                foreach (var error in ModelState.Values.SelectMany(v => v.Errors))
-                {
-                    ModelState.AddModelError(string.Empty, error.ErrorMessage);
-                }
-                return View("TicketsDetails", ticketDetailsViewModel);
+                _logger.LogError("No ticket details found in session for key {key}", key);
+                return BadRequest();
             }
-
-            ViewBag.User = User.IsInRole("Admin");
+            var ticketDetailsViewModel = JsonSerializer.Deserialize<TicketDetailsViewModel>(serializedData);
+            if (ticketDetailsViewModel == null)
+            {
+                _logger.LogError("Failed to deserialize ticket details for key {key}", key);
+                return BadRequest();
+            }
 
             var Event = await _unitOfWork.EventRepository.GetbyIdAsync(ticketDetailsViewModel.EventId);
             if (Event == null) return BadRequest();
-
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (string.IsNullOrEmpty(userId))
+            {
+                ViewBag.ErrorMessage = Localizer["User not found"];
+                _logger.LogError("User ID not found in claims.");
+                return View(ticketDetailsViewModel);
+            }
             foreach (var info in ticketDetailsViewModel.Tickets)
             {
                 Ticket ticket = new Ticket
@@ -83,7 +104,8 @@ namespace Tazkarti.Controllers
                     EventID = ticketDetailsViewModel.EventId,
                     Name = info.Name,
                     Email = info.Email,
-                    PhoneNumber = info.PhoneNumber
+                    PhoneNumber = info.PhoneNumber,
+                    UserId = userId
                 };
                 await _unitOfWork.TicketRepository.AddAsync(ticket);
                 Event.NoOfTickets -= 1;
@@ -96,9 +118,10 @@ namespace Tazkarti.Controllers
             catch (Exception ex)
             {
                 ModelState.AddModelError(string.Empty, ex.Message);
-                return View(nameof(TicketsDetails), ticketDetailsViewModel);
+                _logger.LogError(ex, "Error occurred while booking tickets for event {eventId}", Event.Id);
+                return View(nameof(TicketsDetails), ticketDetailsViewModel.NumberOfTickets);
             }
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(UserTickets));
         }
     }
 }

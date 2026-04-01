@@ -13,6 +13,9 @@ namespace BLL.Repositories
             _dbContext = dbContext;
         }
 
+        public async Task<IEnumerable<Ticket>> GetAllForUserAsync(string userId)
+            => await _dbContext.Set<Ticket>().Where(t => Equals(t.UserId, userId)).Include(t => t.Event).Include(t => t.User).ToListAsync();
+
         public async Task<IEnumerable<Ticket>> Search(string? SearchValue)
              => SearchValue is not null ?
             await _dbContext.Set<Ticket>().Where(x => x.Id.ToString().Contains(SearchValue)).Include(t => t.Event).ToListAsync() :

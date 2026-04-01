@@ -381,4 +381,67 @@
   <data name="User" xml:space="preserve">
     <value>المستخدم</value>
   </data>
+  <data name="User not found" xml:space="preserve">
+    <value>لم يتم العثور على المستخدم. الرجاء تسجيل الدخول مرة أخرى.</value>
+  </data>
+  <data name="My Tickets" xml:space="preserve">
+    <value>تذاكري</value>
+  </data>
+  <data name="Review and manage all your purchased tickets in one place." xml:space="preserve">
+    <value>قم بمراجعة وإدارة جميع تذاكرك المشتراة في مكان واحد.</value>
+  </data>
+  <data name="No tickets found" xml:space="preserve">
+    <value>لم يتم العثور على تذاكر</value>
+  </data>
+  <data name="You haven't purchased any tickets yet. Explore our events and get your first one!" xml:space="preserve">
+    <value>لم تقم بشراء أي تذاكر بعد. استكشف فعالياتنا واحصل على تذكرتك الأولى!</value>
+  </data>
+  <data name="Explore Events" xml:space="preserve">
+    <value>استكشف الفعاليات</value>
+  </data>
+  <data name="Active" xml:space="preserve">
+    <value>نشط</value>
+  </data>
+  <data name="Invalid" xml:space="preserve">
+    <value>غير صالح</value>
+  </data>
+  <data name="View QR Code" xml:space="preserve">
+    <value>عرض رمز QR</value>
+  </data>
+  <data name="Incorrect E-mail Or Password" xml:space="preserve">
+    <value>البريد الإلكتروني أو كلمة المرور غير صحيحة</value>
+  </data>
+  <data name="Logout" xml:space="preserve">
+    <value>تسجيل خروج</value>
+  </data>
+  <data name="Event" xml:space="preserve">
+    <value>حفلة</value>
+  </data>
+  <data name="Ticket ID" xml:space="preserve">
+    <value>كود التذكرة</value>
+  </data>
+  <data name="Date &amp; time" xml:space="preserve">
+    <value>التاريخ و الوقت</value>
+  </data>
+  <data name="Venue" xml:space="preserve">
+    <value>مكان</value>
+  </data>
+  <data name="Price" xml:space="preserve">
+    <value>السعر</value>
+  </data>
+  <data name="Attendee" xml:space="preserve">
+    <value>الحضور</value>
+  </data>
+  <data name="Official document" xml:space="preserve">
+    <value>وثيقة رسمية · منصة Tazkarti</value>
+  </data>
+  <data name="Do not share" xml:space="preserve">
+    <value>لا تشاركها</value>
+  </data>
+  <data name="Download Ticket" xml:space="preserve">
+    <value>تحميل التذكرة</value>
+  </data>
+  <data name="Scan at entrance" xml:space="preserve">
+    <value>قم بمسح الرمز عند المدخل</value>
+  </data>
 </root>

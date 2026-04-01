@@ -18,6 +18,7 @@ namespace DAL.Context
         {
             base.OnModelCreating(modelBuilder);
             modelBuilder.Entity<Event>().Property(e => e.Price).HasColumnType("decimal(18, 2)");
+            modelBuilder.Entity<AppUser>().HasMany(u => u.Tickets).WithOne(t => t.User).HasForeignKey(t => t.UserId).OnDelete(DeleteBehavior.Restrict);
             foreach (var relationship in modelBuilder.Model.GetEntityTypes().SelectMany(e => e.GetForeignKeys()))
             {
                 relationship.DeleteBehavior = DeleteBehavior.Restrict;

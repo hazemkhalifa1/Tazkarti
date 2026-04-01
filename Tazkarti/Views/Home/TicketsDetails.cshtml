@@ -10,7 +10,7 @@
             @Localizer["Please provide details for each ticket"] (@Model.NumberOfTickets @Localizer["tickets"]).
         </p>
 
-        <form asp-action="Booking" method="post">
+        <form asp-controller="Payment" asp-action="CreateCheckoutSession" method="post">
             <div asp-validation-summary="All" class="text-red-500 mb-4"></div>
             <input type="hidden" asp-for="EventId" />
             <input type="hidden" asp-for="NumberOfTickets" />
@@ -40,7 +40,7 @@
             }
 
             <div class="flex justify-between items-center mt-8">
-                <a asp-action="Details" asp-route-id="@Model.EventId" class="px-6 py-3 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition">
+                <a asp-action="EventDetails" asp-route-id="@Model.EventId" class="px-6 py-3 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition">
                     @Localizer["Back to Events"]
                 </a>
                 <button type="submit" class="px-8 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition shadow-md">

@@ -1,6 +1,8 @@
 ﻿using DAL.Entities;
+using DAL.Resource;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Localization;
 using Tazkarti.Models;
 
 namespace Tazkarti.Controllers
@@ -10,12 +12,14 @@ namespace Tazkarti.Controllers
         private readonly UserManager<AppUser> _userManager;
         private readonly SignInManager<AppUser> _signInManager;
         private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly IStringLocalizer<SharedResource> _localizer;
 
-        public AccountController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, RoleManager<IdentityRole> roleManager)
+        public AccountController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, RoleManager<IdentityRole> roleManager, IStringLocalizer<SharedResource> localizer)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _roleManager = roleManager;
+            _localizer = localizer;
         }
 
         public ActionResult Login()
@@ -36,7 +40,7 @@ namespace Tazkarti.Controllers
                     if (result.Succeeded) return RedirectToAction("Index", "Home");
                 }
             }
-            ModelState.AddModelError("", "Incorrect E-mail Or Password");
+            ModelState.AddModelError("", _localizer["Incorrect E-mail Or Password"]);
             return View(userVM);
         }
 
@@ -79,6 +83,12 @@ namespace Tazkarti.Controllers
                     ModelState.AddModelError("", item.Description);
                 }
             return View(model);
+        }
+
+        public async Task<ActionResult> Logout()
+        {
+            await _signInManager.SignOutAsync();
+            return RedirectToAction("Index", "Home");
         }
     }
 }

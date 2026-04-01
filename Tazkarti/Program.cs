@@ -24,14 +24,20 @@ namespace Tazkarti
                     retainedFileCountLimit: 30,
                     outputTemplate: "{Timestamp:yyyy-MM-dd HH:mm:ss} [{Level}] {Message}{NewLine}{Exception}")
                 .MinimumLevel.Information()
-                .MinimumLevel.Override("Microsoft.EntityFrameworkCore.Database.Command", LogEventLevel.Information)
+                //.MinimumLevel.Override("Microsoft.EntityFrameworkCore.Database.Command", LogEventLevel.Information)
                 .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
                 .MinimumLevel.Override("System", LogEventLevel.Warning)
                 .CreateLogger();
 
             builder.Services.AddSerilog();
-
-            // Add services to the container.
+            builder.Services.AddDistributedMemoryCache(); // أو أي مخزن مؤقت
+            builder.Services.AddSession(options =>
+            {
+                options.IdleTimeout = TimeSpan.FromMinutes(30); // صلاحية الجلسة
+                options.Cookie.HttpOnly = true;
+                options.Cookie.IsEssential = true;
+            });
+            builder.Services.AddLocalization();
             builder.Services.AddControllersWithViews()
                 .AddViewLocalization()
                 .AddDataAnnotationsLocalization(options =>
@@ -77,7 +83,7 @@ namespace Tazkarti
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-
+            app.UseSession();
             app.UseRouting();
 
             // Add RequestLocalization middleware
