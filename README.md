@@ -1,7 +1,5 @@
 # 🎟️ Tazkarti (تذكرتي) - Tier-1 Ticket Reservation System
 
-![Tazkarti Banner](Tazkarti/wwwroot/Files/Images/tazkarti_banner_1775064222348.png)
-
 ## 📖 Overview
 
 **Tazkarti** is a high-performance, enterprise-grade ticket reservation platform built with **ASP.NET Core 10**. Designed with modern **N-Tier Architecture** and user experience at its core, it provides a seamless interface for users to discover events, book tickets securely, and manage their reservations in a fully localized, multilingual environment (English & Arabic).
@@ -113,7 +111,10 @@ dotnet test
 
 | Home Page (Arabic RTL) | High-Fidelity PDF Ticket | Dark Mode Event Info |
 | :---: | :---: | :---: |
-| *[Capture & Link Here]* | *[Capture & Link Here]* | *[Capture & Link Here]* |
+| <img width="1349" height="644" alt="image" src="https://github.com/user-attachments/assets/c107b530-61dd-4e27-a4ba-032e8fd5eedd" />
+ | <img width="1121" height="529" alt="image" src="https://github.com/user-attachments/assets/5e40b06c-bda9-4fdf-bfc2-13054eda9be8" />
+ | <img width="1346" height="646" alt="image" src="https://github.com/user-attachments/assets/98aaf1e3-2fa8-4964-8cae-e3e97328bbd5" />
+ |
 
 > [!TIP]
 > **Pro Tip**: Use the built-in language switcher at the top right to explore the full RTL experience.
