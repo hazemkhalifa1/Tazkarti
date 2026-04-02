@@ -1,3 +1,5 @@
+![Tazkarti Banner](Tazkarti/wwwroot/Files/Images/tazkarti_banner.png)
+
 # 🎟️ Tazkarti (تذكرتي) - Tier-1 Ticket Reservation System
 
 ## 📖 Overview
@@ -107,14 +109,11 @@ dotnet test
 
 ---
 
-## 📸 Screenshots (Coming Soon)
+## 📸 Showcasing Tazkarti
 
 | Home Page (Arabic RTL) | High-Fidelity PDF Ticket | Dark Mode Event Info |
 | :---: | :---: | :---: |
-| <img width="1349" height="644" alt="image" src="https://github.com/user-attachments/assets/c107b530-61dd-4e27-a4ba-032e8fd5eedd" />
- | <img width="1121" height="529" alt="image" src="https://github.com/user-attachments/assets/5e40b06c-bda9-4fdf-bfc2-13054eda9be8" />
- | <img width="1346" height="646" alt="image" src="https://github.com/user-attachments/assets/98aaf1e3-2fa8-4964-8cae-e3e97328bbd5" />
- |
+| <img width="1349" alt="Home Page RTL" src="https://github.com/user-attachments/assets/c107b530-61dd-4e27-a4ba-032e8fd5eedd" /> | <img width="1121" alt="PDF Ticket" src="https://github.com/user-attachments/assets/5e40b06c-bda9-4fdf-bfc2-13054eda9be8" /> | <img width="1346" alt="Dark Mode" src="https://github.com/user-attachments/assets/98aaf1e3-2fa8-4964-8cae-e3e97328bbd5" /> |
 
 > [!TIP]
 > **Pro Tip**: Use the built-in language switcher at the top right to explore the full RTL experience.
