@@ -1,102 +1,122 @@
-# 🎟️ Tazkarti (تذكرتي) - Professional Ticket Reservation System
+# 🎟️ Tazkarti (تذكرتي) - Tier-1 Ticket Reservation System
 
-![Tazkarti Banner](Tazkarti\wwwroot\Files\Images\tazkarti_banner.png)
+![Tazkarti Banner](Tazkarti/wwwroot/Files/Images/tazkarti_banner.png)
 
 ## 📖 Overview
 
-**Tazkarti** is a high-performance, feature-rich ticket reservation platform built with **ASP.NET Core 10**. Designed with modern architecture and user experience in mind, it provides a seamless interface for users to browse events, book tickets, and manage their reservations in a multilingual environment (English & Arabic).
+**Tazkarti** is a high-performance, enterprise-grade ticket reservation platform built with **ASP.NET Core 10**. Designed with modern **N-Tier Architecture** and user experience at its core, it provides a seamless interface for users to discover events, book tickets securely, and manage their reservations in a fully localized, multilingual environment (English & Arabic).
 
-The system emphasizes **design excellence**, **localization**, and **robustness**, featuring a clean N-Tier architecture and advanced client-side features like high-fidelity PDF ticket generation.
+The system emphasizes **design excellence**, **bi-directional layout support (LTR/RTL)**, and **robustness**, featuring advanced client-side features like high-fidelity PDF ticket generation with correct Arabic text reshaping.
 
 ---
 
 ## ✨ Key Features
 
-- 💳 **Secure Payments**: Integrated with **Stripe Checkout** for safe and seamless credit card transactions.
-- 🌍 **Full Localization (i18n)**: Seamless switching between English and Arabic with full RTL (Right-to-Left) support.
-- 🖨️ **High-Fidelity PDF Tickets**: Download tickets as beautifully designed PDFs using `jsPDF` and `html2canvas`, featuring:
-  - Dynamic QR codes (Ready for expansion).
-  - Custom sawtooth design dividers.
-  - Correct Arabic text reshaping and rendering in PDF.
-- 🌓 **Adaptive UI**: Premium design with support for both **Light and Dark modes**.
-- 🔐 **Secure Authentication**: Built on ASP.NET Core Identity for secure user registration, login, and role management.
-- 🏗️ **Professional Architecture**: Implements **N-Tier Architecture** with Repository and Unit of Work patterns.
-- 📱 **Fully Responsive**: Mobile-first design ensuring a great experience on any device.
-- 📊 **Dashboards**: Dedicated interfaces for users and administrators.
+- 💳 **Secure Payments**: Integrated with **Stripe Checkout** for industry-standard secured credit card transactions.
+- 🌍 **Full Localization (i18n)**: One-click switching between English and Arabic with full **RTL (Right-to-Left)** support.
+- 🖨️ **High-Fidelity PDF Tickets**: Client-side PDF generation using `jsPDF` and `html2canvas`, featuring:
+  - **Arabic Text Reshaping**: Fixed layout issues for Arabic characters in PDFs.
+  - **Dynamic QR Codes**: Ready for gate verification.
+  - **Custom Aesthetics**: Sawtooth dividers and premium design.
+- 🌓 **Dynamic Theme Engine**: Premium UI with support for both **Light and Dark modes**.
+- 🏗️ **Professional Architecture**: Implements **N-Tier Architecture** with Repository and Unit of Work patterns for maximum scalability.
+- 📱 **Responsive Design**: Mobile-first approach ensuring a premium experience on any device.
 
 ---
 
 ## 🛠️ Technology Stack
 
-| Layer | Technologies |
-| :--- | :--- |
-| **Backend** | C#, .NET 10, ASP.NET Core MVC |
-| **Database** | SQL Server, Entity Framework Core 10.0 (Code First) |
-| **Architecture** | N-Tier, Repository Pattern, Unit of Work, Dependency Injection |
-| **Frontend** | HTML5, CSS3 (Vanilla), JavaScript, Bootstrap 5 |
-| **Libraries** | AutoMapper, Serilog, jsPDF, html2canvas, Arabic Reshaper, **Stripe.net** |
-| **Identity** | Microsoft ASP.NET Core Identity |
+### 🚀 Backend & Core
+- **Framework**: [.NET 10 (ASP.NET Core MVC)](https://dotnet.microsoft.com/)
+- **Database**: [SQL Server](https://www.microsoft.com/en-us/sql-server/)
+- **ORM**: [Entity Framework Core 10.0 (Code First)](https://learn.microsoft.com/en-us/ef/core/)
+- **Identity**: [Microsoft ASP.NET Core Identity](https://learn.microsoft.com/en-us/aspnet/core/security/authentication/identity) (Auth & Role Management)
+- **Mapping**: [AutoMapper](https://automapper.org/) (for Clean DTO Transitions)
+- **Logging**: [Serilog](https://serilog.net/) (Structured Logging)
+
+### 🎨 Frontend & Design
+- **Styling**: [CSS3 (Vanilla)](https://developer.mozilla.org/en-US/docs/Web/CSS) + [Bootstrap 5](https://getbootstrap.com/)
+- **Logic**: ES6+ JavaScript
+- **PDF Generation**: [jsPDF](https://github.com/parallax/jsPDF) & [html2canvas](https://html2canvas.hertzen.com/)
+- **Localization**: [reshaer-js](https://github.com/Zayan/reshaper-js) (for PDF Arabic reshaping)
+
+### 💳 Payment Gateway
+- **Provider**: [Stripe](https://stripe.com/)
+- **Integration**: **Stripe.net** (Server-side) + Stripe Checkout (Client-side)
+- **Features**: Secure sessions, webhooks-ready, and credit card processing.
+
+### 🧪 Quality Assurance & Testing
+- **Framework**: [xUnit](https://xunit.net/)
+- **Mocking**: [Moq](https://github.com/devlooped/moq) (Mocking Repository layers and Services)
+- **Coverage**: [Coverlet](https://github.com/coverlet-coverage/coverlet)
+- **Scope**: Unit Testing for `BLL`, Controller Testing, and Business Logic validation.
 
 ---
 
-## 🏗️ Project Structure
+## 🏗️ Project Architecture (N-Tier)
 
-The solution follows a clean separation of concerns:
+Tazkarti is built with a clear separation of concerns to ensure maintainability and testability:
 
-- **`Tazkarti` (UI Layer)**: ASP.NET Core MVC project handling controllers, views, view models, and client-side logic.
-- **`BLL` (Business Logic Layer)**: Contains repository interfaces, concrete implementations, and the Unit of Work.
-- **`DAL` (Data Access Layer)**: Manages database context, migrations, and core entities.
-- **`Tazkarti.Tests`**: Unit and integration tests for ensuring system reliability.
+- **`Tazkarti` (Presentation Layer)**: ASP.NET Core MVC handling Controllers, ViewModels, and Client-side assets.
+- **`BLL` (Business Logic Layer)**: Contains Repository interfaces, concrete implementations, and the **Unit of Work** pattern.
+- **`DAL` (Data Access Layer)**: Manages `ApplicationDbContext`, Migrations, and Core Domain Entities.
+- **`Tazkarti.Tests`**: Dedicated test project for ensuring system reliability.
 
 ---
 
 ## 🚀 Getting Started
 
 ### Prerequisites
-- [.NET 10 SDK](https://dotnet.microsoft.com/download/dotnet/10.0)
-- [SQL Server](https://www.microsoft.com/en-us/sql-server/sql-server-downloads) (Express or Developer edition)
-- [Visual Studio 2022](https://visualstudio.microsoft.com/) (latest preview or version supporting .NET 10)
+- .NET 10 SDK
+- SQL Server (Express/Developer)
+- Visual Studio 2022
 
-### Installation
+### Installation & Setup
 
 1.  **Clone the repository**:
     ```bash
-    git clone https://github.com/your-username/Tazkarti.git
+    git clone https://github.com/hazemkhalifa1/Tazkarti.git
     cd Tazkarti
     ```
 
-3.  **Configure Environment Secrets**:
-    Add your Stripe keys and connection string to `Tazkarti/appsettings.json` or use `User Secrets`:
+2.  **Configure Connection & API Keys**:
+    Update `Tazkarti/appsettings.json` with your credentials:
     ```json
     {
-      "ConnectionStrings": {
-        "MyConnection": "Server=...;Database=Tazkarti;..."
-      },
-      "StripeKeys": {
-        "Secretkey": "sk_test_...",
-        "Publishablekey": "pk_test_..."
-      }
+      "ConnectionStrings": { "MyConnection": "Server=...;Database=Tazkarti;..." },
+      "StripeKeys": { "Secretkey": "sk_test_...", "Publishablekey": "pk_test_..." }
     }
     ```
 
-4.  **Apply Migrations**:
-    Open Package Manager Console and run:
+3.  **Run Database Migrations**:
     ```powershell
     Update-Database -Project DAL -StartupProject Tazkarti
     ```
 
-4.  **Run the Application**:
+4.  **Run the Project**:
     ```bash
     dotnet run --project Tazkarti
     ```
 
 ---
 
-## 📸 Screenshots
+## 🧪 Running Tests
 
-| Home Page | Ticket Generation |
-| :---: | :---: |
-| *[Dynamic Landing Page with Event Cards]* | *[High-Fidelity PDF Export]* |
+To run the full suite of unit and integration tests:
+```bash
+dotnet test
+```
+
+---
+
+## 📸 Screenshots (Coming Soon)
+
+| Home Page (Arabic RTL) | High-Fidelity PDF Ticket | Dark Mode Event Info |
+| :---: | :---: | :---: |
+| *[Capture & Link Here]* | *[Capture & Link Here]* | *[Capture & Link Here]* |
+
+> [!TIP]
+> **Pro Tip**: Use the built-in language switcher at the top right to explore the full RTL experience.
 
 ---
 
@@ -107,5 +127,5 @@ Distributed under the MIT License. See `LICENSE` for more information.
 ---
 
 <p align="center">
-  Generated with ❤️ for a premium user experience.
+  Developed by <a href="https://github.com/hazemkhalifa1">Hazem Khalifa</a> with ❤️
 </p>
