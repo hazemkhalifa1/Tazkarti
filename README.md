@@ -1,5 +1,3 @@
-![Tazkarti Banner](Tazkarti/wwwroot/Files/Images/tazkarti_banner.png)
-
 # 🎟️ Tazkarti (تذكرتي) - Tier-1 Ticket Reservation System
 
 ## 📖 Overview
