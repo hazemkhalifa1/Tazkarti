@@ -1,8 +1,8 @@
 using AutoMapper;
 using BLL.Interfaces;
 using DAL.Entities;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Moq;
 using Tazkarti.Controllers;
 using Tazkarti.Models;
@@ -15,13 +15,15 @@ namespace Tazkarti.Tests.Controllers.Tests
         private readonly Mock<IGenaricRepository<Event>> _eventRepository;
         private readonly Mock<IUnitOfWork> _unitOfWork;
         private readonly Mock<IMapper> _mapper;
+        private readonly Mock<ILogger<EventController>> _logger;
 
         public EventControllerTests()
         {
             _unitOfWork = new Mock<IUnitOfWork>();
             _mapper = new Mock<IMapper>();
             _eventRepository = new Mock<IGenaricRepository<Event>>();
-            _controller = new EventController(_unitOfWork.Object, _mapper.Object);
+            _logger = new Mock<ILogger<EventController>>();
+            _controller = new EventController(_unitOfWork.Object, _mapper.Object, _logger.Object);
 
             //setup
             _unitOfWork.Setup(u => u.EventRepository).Returns(_eventRepository.Object);
@@ -212,7 +214,7 @@ namespace Tazkarti.Tests.Controllers.Tests
             _mapper.Setup(m => m.Map<Event>(eventVM)).Returns(ev);
 
             // Act
-            var result = await _controller.Delete(eventId, eventVM);
+            var result = await _controller.Delete(eventId);
 
             // Assert
             var redirectToActionResult = Assert.IsType<RedirectToActionResult>(result);
@@ -225,7 +227,7 @@ namespace Tazkarti.Tests.Controllers.Tests
         public async Task Delete_POST_IdMismatch_ReturnsBadRequest()
         {
             // Arrange
-            var result = await _controller.Delete(Guid.NewGuid(), new EventVM { Id = Guid.NewGuid() });
+            var result = await _controller.Delete(Guid.NewGuid());
 
             // Assert
             Assert.IsType<BadRequestResult>(result);

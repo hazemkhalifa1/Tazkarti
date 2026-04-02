@@ -121,7 +121,7 @@ namespace Tazkarti.Tests.Controllers.Tests
             _unitOfWork.Setup(u => u.TicketRepository.AddAsync(It.IsAny<Ticket>())).Returns(Task.CompletedTask);
 
             // Act
-            var result = await _controller.Booking(eventId, model);
+            var result = await _controller.Booking(eventId.ToString());
 
             // Assert
             var redirectToActionResult = Assert.IsType<RedirectToActionResult>(result);

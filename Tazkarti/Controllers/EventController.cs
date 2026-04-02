@@ -14,11 +14,13 @@ namespace Tazkarti.Controllers
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
+        private readonly ILogger<EventController> _logger;
 
-        public EventController(IUnitOfWork unitOfWork, IMapper mapper)
+        public EventController(IUnitOfWork unitOfWork, IMapper mapper, ILogger<EventController> logger)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+            _logger = logger;
         }
 
         // GET: EventController
@@ -100,22 +102,16 @@ namespace Tazkarti.Controllers
             return View("~/Views/Dashboard/Event/Edit.cshtml", eventVM);
         }
 
-        // GET: EventController/Delete/5
-        public async Task<ActionResult> Delete(Guid id)
-        {
-            return View("~/Views/Dashboard/Event/Delete.cshtml", _mapper.Map<EventVM>(await _unitOfWork.EventRepository.GetbyIdAsync(id)));
-        }
-
         // POST: EventController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Delete(Guid id, EventVM eventVM)
+        public async Task<ActionResult> Delete(Guid id)
         {
-            if (id != eventVM.Id)
-                return BadRequest();
             try
             {
-                _unitOfWork.EventRepository.Delete(_mapper.Map<Event>(eventVM));
+                var eventVM = await _unitOfWork.EventRepository.GetbyIdAsync(id);
+                if (eventVM is null) return BadRequest();
+                _unitOfWork.EventRepository.Delete(eventVM);
                 if (eventVM.ImageName is not null)
                     DocumentSetting.DeleteFile(eventVM.ImageName, "Images");
                 await _unitOfWork.SaveChangesAsync();
@@ -124,8 +120,9 @@ namespace Tazkarti.Controllers
             catch (Exception ex)
             {
                 ModelState.AddModelError("", ex.Message);
+                _logger.LogError(ex, "Error occurred while deleting event with ID {eventId}", id);
+                return RedirectToAction(nameof(Index));
             }
-            return View("~/Views/Dashboard/Event/Delete.cshtml", eventVM);
         }
     }
 }

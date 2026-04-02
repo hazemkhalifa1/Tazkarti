@@ -1,6 +1,6 @@
 # 🎟️ Tazkarti (تذكرتي) - Professional Ticket Reservation System
 
-![Tazkarti Banner](file:///C:/Users/Hazem%20Khalifa/.gemini/antigravity/brain/0b9ab02a-1788-47ea-8319-c124d0366668/tazkarti_banner_1775064222348.png)
+![Tazkarti Banner](Tazkarti\wwwroot\Files\Images\tazkarti_banner.png)
 
 ## 📖 Overview
 
@@ -12,6 +12,7 @@ The system emphasizes **design excellence**, **localization**, and **robustness*
 
 ## ✨ Key Features
 
+- 💳 **Secure Payments**: Integrated with **Stripe Checkout** for safe and seamless credit card transactions.
 - 🌍 **Full Localization (i18n)**: Seamless switching between English and Arabic with full RTL (Right-to-Left) support.
 - 🖨️ **High-Fidelity PDF Tickets**: Download tickets as beautifully designed PDFs using `jsPDF` and `html2canvas`, featuring:
   - Dynamic QR codes (Ready for expansion).
@@ -33,7 +34,7 @@ The system emphasizes **design excellence**, **localization**, and **robustness*
 | **Database** | SQL Server, Entity Framework Core 10.0 (Code First) |
 | **Architecture** | N-Tier, Repository Pattern, Unit of Work, Dependency Injection |
 | **Frontend** | HTML5, CSS3 (Vanilla), JavaScript, Bootstrap 5 |
-| **Libraries** | AutoMapper, Serilog, jsPDF, html2canvas, Arabic Reshaper |
+| **Libraries** | AutoMapper, Serilog, jsPDF, html2canvas, Arabic Reshaper, **Stripe.net** |
 | **Identity** | Microsoft ASP.NET Core Identity |
 
 ---
@@ -64,10 +65,21 @@ The solution follows a clean separation of concerns:
     cd Tazkarti
     ```
 
-2.  **Update Database Connection**:
-    Open `Tazkarti/appsettings.json` and update the `MyConnection` string.
+3.  **Configure Environment Secrets**:
+    Add your Stripe keys and connection string to `Tazkarti/appsettings.json` or use `User Secrets`:
+    ```json
+    {
+      "ConnectionStrings": {
+        "MyConnection": "Server=...;Database=Tazkarti;..."
+      },
+      "StripeKeys": {
+        "Secretkey": "sk_test_...",
+        "Publishablekey": "pk_test_..."
+      }
+    }
+    ```
 
-3.  **Apply Migrations**:
+4.  **Apply Migrations**:
     Open Package Manager Console and run:
     ```powershell
     Update-Database -Project DAL -StartupProject Tazkarti

@@ -8,12 +8,13 @@ using Microsoft.EntityFrameworkCore;
 using Serilog;
 using Serilog.Events;
 using System.Reflection;
+using Tazkarti.extension;
 
 namespace Tazkarti
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
 
@@ -30,10 +31,10 @@ namespace Tazkarti
                 .CreateLogger();
 
             builder.Services.AddSerilog();
-            builder.Services.AddDistributedMemoryCache(); // أو أي مخزن مؤقت
+            builder.Services.AddDistributedMemoryCache();
             builder.Services.AddSession(options =>
             {
-                options.IdleTimeout = TimeSpan.FromMinutes(30); // صلاحية الجلسة
+                options.IdleTimeout = TimeSpan.FromMinutes(30);
                 options.Cookie.HttpOnly = true;
                 options.Cookie.IsEssential = true;
             });
@@ -80,7 +81,7 @@ namespace Tazkarti
             }
 
             app.UseSerilogRequestLogging();
-
+            await app.EventSeeding();
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseSession();
